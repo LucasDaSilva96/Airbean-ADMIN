@@ -10,7 +10,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 import mongoose from 'mongoose';
 import validator from 'validator';
 import { genSalt, hash } from 'bcrypt-ts';
-const HASH = process.env.HASH;
 const userSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -46,6 +45,9 @@ const userSchema = new mongoose.Schema({
     updated_at: {
         type: Date,
     },
+    image: {
+        type: String,
+    },
 });
 userSchema.pre('save', function (next) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -54,11 +56,8 @@ userSchema.pre('save', function (next) {
             if (!isSame) {
                 throw Error('Password and Confirm password did not match');
             }
-            else if (!HASH) {
-                throw Error('Failed to import hash secret');
-            }
             const salt = yield genSalt(10);
-            this.password = yield hash(HASH, salt);
+            this.password = yield hash(this.password, salt);
             this.password_confirm = '';
         }
         next();
