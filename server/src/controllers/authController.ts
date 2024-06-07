@@ -40,7 +40,7 @@ export const signUp_post: RequestHandler = async (req, res, next) => {
         'Please provide name, email, password and password confirm'
       );
 
-    const new_user = await UserModel.create({
+    const user_doc = await UserModel.create({
       name,
       email,
       password,
@@ -48,6 +48,20 @@ export const signUp_post: RequestHandler = async (req, res, next) => {
       role: role ? role : 'user',
     });
 
+    const new_user = {
+      name: user_doc.name,
+      email: user_doc.email,
+      password: user_doc.password,
+      role: user_doc.role,
+      _id: user_doc.id,
+      created_at: user_doc.created_at,
+    };
+
+    // 1 day in milliseconds = 1000 * 60 * 60 * 24
+    res.cookie('user', JSON.stringify(new_user), {
+      maxAge: 1000 * 60 * 60 * 24,
+      httpOnly: true,
+    });
     res.status(200).json({
       status: 'success',
       message: 'Sign up successfully (POST)',

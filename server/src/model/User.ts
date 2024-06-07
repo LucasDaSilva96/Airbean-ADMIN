@@ -1,4 +1,8 @@
 import mongoose from 'mongoose';
+import validator from 'validator';
+import { genSalt, hash } from 'bcrypt-ts';
+
+const HASH = process.env.HASH;
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -11,6 +15,7 @@ const userSchema = new mongoose.Schema({
     unique: true,
     lowercase: true,
     trim: true,
+    validator: [validator.isEmail, 'Please provide a valid email.'],
   },
   password: {
     type: String,
@@ -21,6 +26,7 @@ const userSchema = new mongoose.Schema({
   password_confirm: {
     type: String,
     required: [true, 'Confirm password'],
+    select: false,
   },
 
   created_at: {
@@ -37,6 +43,22 @@ const userSchema = new mongoose.Schema({
   updated_at: {
     type: Date,
   },
+});
+
+userSchema.pre('save', async function (next) {
+  if (this.password && this.password_confirm) {
+    const isSame = this.password === this.password_confirm;
+    if (!isSame) {
+      throw Error('Password and Confirm password did not match');
+    } else if (!HASH) {
+      throw Error('Failed to import hash secret');
+    }
+
+    const salt = await genSalt(10);
+    this.password = await hash(HASH, salt);
+    this.password_confirm = '';
+  }
+  next();
 });
 
 export const UserModel = mongoose.model('user', userSchema);
