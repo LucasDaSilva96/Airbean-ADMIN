@@ -3,6 +3,8 @@ import cors from 'cors';
 import { authRouter } from './routes/authRoutes.js';
 import { errorHandler } from './controllers/errorHandlingController.js';
 import cookieParser from 'cookie-parser';
+import { menuRouter } from './routes/menuRoutes.js';
+import { promotionalRouter } from './routes/Promotional_offers_Routes.js';
 const app = express();
 // Cookie parser middleware
 app.use(cookieParser());
@@ -18,6 +20,8 @@ app.enable('trust proxy');
 app.options('*', cors());
 // Routes
 app.use('/api', authRouter);
+app.use('/api/menu', menuRouter);
+app.use('/api/offers', promotionalRouter);
 // Error handling
 app.use(errorHandler);
 export default app;

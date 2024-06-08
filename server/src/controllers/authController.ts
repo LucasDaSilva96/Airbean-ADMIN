@@ -3,7 +3,9 @@ import { UserModel } from '../model/User.js';
 import { createJWT } from '../utils/create_JWT_token.js';
 import { compare } from 'bcrypt-ts';
 
-export const signUp_get: RequestHandler = async (req, res, next) => {
+const CLIENT_BASE_URL = process.env.CLIENT_BASE_URL;
+
+export const signUp_get: RequestHandler = async (_req, res, next) => {
   try {
     res.status(200).json({
       status: 'success',
@@ -18,7 +20,7 @@ export const signUp_get: RequestHandler = async (req, res, next) => {
   }
 };
 
-export const login_get: RequestHandler = async (req, res, next) => {
+export const login_get: RequestHandler = async (_req, res, next) => {
   try {
     res.status(200).json({
       status: 'success',
@@ -123,10 +125,12 @@ export const login_post: RequestHandler = async (req, res, next) => {
   }
 };
 
-export const logout_get: RequestHandler = async (req, res, next) => {
+export const logout_get: RequestHandler = async (_req, res, next) => {
   try {
     res.cookie('jwt', '', { maxAge: 1 });
-    res.redirect('/');
+    if (CLIENT_BASE_URL) {
+      res.redirect(CLIENT_BASE_URL);
+    }
     res.status(200).json({
       status: 'success',
       message: 'User successfully logged out',

@@ -10,7 +10,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 import { UserModel } from '../model/User.js';
 import { createJWT } from '../utils/create_JWT_token.js';
 import { compare } from 'bcrypt-ts';
-export const signUp_get = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+const CLIENT_BASE_URL = process.env.CLIENT_BASE_URL;
+export const signUp_get = (_req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         res.status(200).json({
             status: 'success',
@@ -26,7 +27,7 @@ export const signUp_get = (req, res, next) => __awaiter(void 0, void 0, void 0, 
         }
     }
 });
-export const login_get = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+export const login_get = (_req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         res.status(200).json({
             status: 'success',
@@ -122,10 +123,12 @@ export const login_post = (req, res, next) => __awaiter(void 0, void 0, void 0, 
         }
     }
 });
-export const logout_get = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+export const logout_get = (_req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         res.cookie('jwt', '', { maxAge: 1 });
-        res.redirect('/');
+        if (CLIENT_BASE_URL) {
+            res.redirect(CLIENT_BASE_URL);
+        }
         res.status(200).json({
             status: 'success',
             message: 'User successfully logged out',

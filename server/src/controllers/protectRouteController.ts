@@ -4,22 +4,28 @@ import { UserModel } from '../model/User.js';
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
+const CLIENT_BASE_URL = process.env.CLIENT_BASE_URL;
+
 export const protect: RequestHandler = async (req, res, next) => {
   try {
     const TOKEN: string = req.cookies.jwt;
 
     if (!TOKEN) {
-      res.redirect('/');
-      throw new Error('JWT not provided');
+      if (CLIENT_BASE_URL) {
+        res.redirect(CLIENT_BASE_URL);
+      }
+      throw new Error('JWT not provided, Log in first');
     }
 
     if (!JWT_SECRET) {
-      res.redirect('/');
       throw new Error('JWT secret is undefined');
     }
 
-    jwt.verify(TOKEN, JWT_SECRET, (err, _decodedToken) => {
+    jwt.verify(TOKEN, JWT_SECRET, function (err, decodedToken) {
       if (err) throw new Error(err.message);
+      if (typeof decodedToken === 'object') {
+        req.body.id = decodedToken.id;
+      }
       next();
     });
   } catch (e) {
@@ -33,11 +39,11 @@ export const protect: RequestHandler = async (req, res, next) => {
 
 export const adminOnly: RequestHandler = async (req, res, next) => {
   try {
-    const { email } = req.body;
+    const { id } = req.body;
 
-    if (!email) throw new Error('Email was not provided');
+    if (!id) throw new Error('Id was not provided');
 
-    const user = await UserModel.findOne({ email });
+    const user = await UserModel.findById(id);
 
     if (!user) throw new Error('No user found with the provide email');
 
