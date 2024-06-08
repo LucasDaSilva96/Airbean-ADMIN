@@ -122,4 +122,22 @@ export const login_post = (req, res, next) => __awaiter(void 0, void 0, void 0, 
         }
     }
 });
+export const logout_get = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        res.cookie('jwt', '', { maxAge: 1 });
+        res.redirect('/');
+        res.status(200).json({
+            status: 'success',
+            message: 'User successfully logged out',
+        });
+    }
+    catch (e) {
+        if (typeof e === 'string') {
+            next(new Error(e.toLocaleLowerCase()));
+        }
+        else if (e instanceof Error) {
+            next(new Error(e.message));
+        }
+    }
+});
 //# sourceMappingURL=authController.js.map

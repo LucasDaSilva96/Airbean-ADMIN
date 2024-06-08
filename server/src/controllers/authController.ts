@@ -122,3 +122,20 @@ export const login_post: RequestHandler = async (req, res, next) => {
     }
   }
 };
+
+export const logout_get: RequestHandler = async (req, res, next) => {
+  try {
+    res.cookie('jwt', '', { maxAge: 1 });
+    res.redirect('/');
+    res.status(200).json({
+      status: 'success',
+      message: 'User successfully logged out',
+    });
+  } catch (e) {
+    if (typeof e === 'string') {
+      next(new Error(e.toLocaleLowerCase()));
+    } else if (e instanceof Error) {
+      next(new Error(e.message));
+    }
+  }
+};
