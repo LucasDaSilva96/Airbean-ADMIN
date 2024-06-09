@@ -6,7 +6,7 @@ export default function VideoPlayer() {
   const [ready, setReady] = useState(false);
 
   return (
-    <div className='min-w-full min-h-full fixed right-0 bottom-0'>
+    <div className='min-w-full min-h-full absolute right-0 bottom-0'>
       <ReactPlayer
         fallback={<Loader />}
         width={'100%'}
