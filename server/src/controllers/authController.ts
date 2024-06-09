@@ -2,56 +2,41 @@ import type { RequestHandler } from 'express';
 import { UserModel } from '../model/User.js';
 import { createJWT } from '../utils/create_JWT_token.js';
 import { compare } from 'bcrypt-ts';
+import { uploadImageToCloud } from '../utils/multer_upload.js';
 
 const CLIENT_BASE_URL = process.env.CLIENT_BASE_URL;
 
-export const signUp_get: RequestHandler = async (_req, res, next) => {
-  try {
-    res.status(200).json({
-      status: 'success',
-      message: 'Sign up successfully (GET)',
-    });
-  } catch (e) {
-    if (typeof e === 'string') {
-      next(new Error(e.toLocaleLowerCase()));
-    } else if (e instanceof Error) {
-      next(new Error(e.message));
-    }
-  }
-};
-
-export const login_get: RequestHandler = async (_req, res, next) => {
-  try {
-    res.status(200).json({
-      status: 'success',
-      message: 'Login successfully (GET)',
-    });
-  } catch (e) {
-    if (typeof e === 'string') {
-      next(new Error(e.toLocaleLowerCase()));
-    } else if (e instanceof Error) {
-      next(new Error(e.message));
-    }
-  }
-};
-
 export const signUp_post: RequestHandler = async (req, res, next) => {
   try {
-    const { name, email, password, password_confirm, role, image } = req.body;
+    const { name, email, password, password_confirm, role } = req.body;
+    const image = req.file;
 
     if (!name || !email || !password || !password_confirm)
       throw new Error(
         'Please provide name, email, password and password confirm'
       );
 
-    const user_doc = await UserModel.create({
-      name,
-      email,
-      password,
-      password_confirm,
-      role: role ? role : 'user',
-      image: image ? image : null,
-    });
+    let user_doc = null;
+    if (image) {
+      const IMAGE = await uploadImageToCloud(image.filename);
+      user_doc = await UserModel.create({
+        name,
+        email,
+        password,
+        password_confirm,
+        role: role ? role : 'user',
+        image: IMAGE,
+      });
+    } else {
+      user_doc = await UserModel.create({
+        name,
+        email,
+        password,
+        password_confirm,
+        role: role ? role : 'user',
+        image: null,
+      });
+    }
 
     const new_user = {
       name: user_doc.name,
@@ -77,6 +62,8 @@ export const signUp_post: RequestHandler = async (req, res, next) => {
       next(new Error(e.toLocaleLowerCase()));
     } else if (e instanceof Error) {
       next(new Error(e.message));
+    } else {
+      next(new Error('Failed to create user'));
     }
   }
 };

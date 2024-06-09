@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 import { UserModel } from '../model/User.js';
 import { createJWT } from '../utils/create_JWT_token.js';
 import { compare } from 'bcrypt-ts';
+import { uploadImageToCloud } from '../utils/multer_upload.js';
 const CLIENT_BASE_URL = process.env.CLIENT_BASE_URL;
 export const signUp_get = (_req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -45,17 +46,33 @@ export const login_get = (_req, res, next) => __awaiter(void 0, void 0, void 0, 
 });
 export const signUp_post = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { name, email, password, password_confirm, role, image } = req.body;
+        const { name, email, password, password_confirm, role } = req.body;
+        const image = req.file;
         if (!name || !email || !password || !password_confirm)
             throw new Error('Please provide name, email, password and password confirm');
-        const user_doc = yield UserModel.create({
-            name,
-            email,
-            password,
-            password_confirm,
-            role: role ? role : 'user',
-            image: image ? image : null,
-        });
+        let user_doc = null;
+        if (image) {
+            const IMAGE = yield uploadImageToCloud(image.filename);
+            console.log(IMAGE);
+            user_doc = yield UserModel.create({
+                name,
+                email,
+                password,
+                password_confirm,
+                role: role ? role : 'user',
+                image: IMAGE,
+            });
+        }
+        else {
+            user_doc = yield UserModel.create({
+                name,
+                email,
+                password,
+                password_confirm,
+                role: role ? role : 'user',
+                image: null,
+            });
+        }
         const new_user = {
             name: user_doc.name,
             role: user_doc.role,

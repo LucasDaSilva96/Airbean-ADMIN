@@ -25,6 +25,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Confirm password'],
     select: false,
+    minlength: 5,
   },
 
   created_at: {
