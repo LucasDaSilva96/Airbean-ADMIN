@@ -145,8 +145,6 @@ export default function SignUp() {
 
   const handleRoleChange = (e: string) => {
     setUser({ ...user, role: e });
-
-    console.log(user.role);
   };
 
   return (
