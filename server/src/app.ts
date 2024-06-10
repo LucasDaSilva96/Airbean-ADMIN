@@ -36,9 +36,11 @@ app.enable('trust proxy');
 
 //allowing the server to respond to requests from different origins
 // Enable CORS for all routes
+// TODO: Update the origin  url
 app.use(
   cors({
-    origin: '*',
+    origin: 'http://localhost:5173',
+    credentials: true,
     optionsSuccessStatus: 200,
   })
 );

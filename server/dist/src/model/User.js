@@ -32,6 +32,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Confirm password'],
         select: false,
+        minlength: 5,
     },
     created_at: {
         type: Date,
@@ -47,6 +48,7 @@ const userSchema = new mongoose.Schema({
     },
     image: {
         type: String,
+        default: 'https://res.cloudinary.com/dqx1ejydp/image/upload/f_auto,q_auto/v1/Airbean/r8fynw2bstf3ymrkr1uq',
     },
 });
 userSchema.pre('save', function (next) {

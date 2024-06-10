@@ -34,7 +34,6 @@ export const signUp_post: RequestHandler = async (req, res, next) => {
         password,
         password_confirm,
         role: role ? role : 'user',
-        image: null,
       });
     }
 
@@ -47,11 +46,18 @@ export const signUp_post: RequestHandler = async (req, res, next) => {
 
     const TOKEN = await createJWT(new_user._id);
 
+    // TODO: Update the origin  url
+    res.header('Access-Control-Allow-Origin', CLIENT_BASE_URL);
+
     // 1 day in milliseconds = 1000 * 60 * 60 * 24
+    // TODO Change http=true, secure=true, sameSite="strict"
     res.cookie('jwt', TOKEN, {
       maxAge: 1000 * 60 * 60 * 24,
-      httpOnly: true,
+      httpOnly: false,
+      secure: false,
+      sameSite: 'lax',
     });
+
     res.status(201).json({
       status: 'success',
       message: 'Sign up successfully (POST)',
@@ -85,10 +91,16 @@ export const login_post: RequestHandler = async (req, res, next) => {
     const TOKEN = await createJWT(user_doc.id);
     if (!TOKEN) throw new Error('Failed to generate JWT');
 
+    // TODO: Update the origin  url
+    res.header('Access-Control-Allow-Origin', CLIENT_BASE_URL);
+
     // 1 day in milliseconds = 1000 * 60 * 60 * 24
+    // TODO Change http=true, secure=true, sameSite="strict"
     res.cookie('jwt', TOKEN, {
       maxAge: 1000 * 60 * 60 * 24,
-      httpOnly: true,
+      httpOnly: false,
+      secure: false,
+      sameSite: 'lax',
     });
 
     const user = {
@@ -114,10 +126,18 @@ export const login_post: RequestHandler = async (req, res, next) => {
 
 export const logout_get: RequestHandler = async (_req, res, next) => {
   try {
-    res.cookie('jwt', '', { maxAge: 1 });
-    if (CLIENT_BASE_URL) {
-      res.redirect(CLIENT_BASE_URL);
-    }
+    // TODO: Update the origin  url
+    res.header('Access-Control-Allow-Origin', CLIENT_BASE_URL);
+
+    // 1 day in milliseconds = 1000 * 60 * 60 * 24
+    // TODO Change http=true, secure=true, sameSite="strict"
+    res.cookie('jwt', '', {
+      maxAge: 1,
+      httpOnly: false,
+      secure: false,
+      sameSite: 'lax',
+    });
+
     res.status(200).json({
       status: 'success',
       message: 'User successfully logged out',

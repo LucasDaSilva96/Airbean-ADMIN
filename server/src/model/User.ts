@@ -44,6 +44,8 @@ const userSchema = new mongoose.Schema({
   },
   image: {
     type: String,
+    default:
+      'https://res.cloudinary.com/dqx1ejydp/image/upload/f_auto,q_auto/v1/Airbean/r8fynw2bstf3ymrkr1uq',
   },
 });
 

@@ -12,38 +12,6 @@ import { createJWT } from '../utils/create_JWT_token.js';
 import { compare } from 'bcrypt-ts';
 import { uploadImageToCloud } from '../utils/multer_upload.js';
 const CLIENT_BASE_URL = process.env.CLIENT_BASE_URL;
-export const signUp_get = (_req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        res.status(200).json({
-            status: 'success',
-            message: 'Sign up successfully (GET)',
-        });
-    }
-    catch (e) {
-        if (typeof e === 'string') {
-            next(new Error(e.toLocaleLowerCase()));
-        }
-        else if (e instanceof Error) {
-            next(new Error(e.message));
-        }
-    }
-});
-export const login_get = (_req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        res.status(200).json({
-            status: 'success',
-            message: 'Login successfully (GET)',
-        });
-    }
-    catch (e) {
-        if (typeof e === 'string') {
-            next(new Error(e.toLocaleLowerCase()));
-        }
-        else if (e instanceof Error) {
-            next(new Error(e.message));
-        }
-    }
-});
 export const signUp_post = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { name, email, password, password_confirm, role } = req.body;
@@ -53,7 +21,6 @@ export const signUp_post = (req, res, next) => __awaiter(void 0, void 0, void 0,
         let user_doc = null;
         if (image) {
             const IMAGE = yield uploadImageToCloud(image.filename);
-            console.log(IMAGE);
             user_doc = yield UserModel.create({
                 name,
                 email,
@@ -70,7 +37,6 @@ export const signUp_post = (req, res, next) => __awaiter(void 0, void 0, void 0,
                 password,
                 password_confirm,
                 role: role ? role : 'user',
-                image: null,
             });
         }
         const new_user = {
@@ -80,10 +46,15 @@ export const signUp_post = (req, res, next) => __awaiter(void 0, void 0, void 0,
             image: user_doc.image,
         };
         const TOKEN = yield createJWT(new_user._id);
+        // TODO: Update the origin  url
+        res.header('Access-Control-Allow-Origin', CLIENT_BASE_URL);
         // 1 day in milliseconds = 1000 * 60 * 60 * 24
+        // TODO Change http=true, secure=true, sameSite="strict"
         res.cookie('jwt', TOKEN, {
             maxAge: 1000 * 60 * 60 * 24,
-            httpOnly: true,
+            httpOnly: false,
+            secure: false,
+            sameSite: 'lax',
         });
         res.status(201).json({
             status: 'success',
@@ -97,6 +68,9 @@ export const signUp_post = (req, res, next) => __awaiter(void 0, void 0, void 0,
         }
         else if (e instanceof Error) {
             next(new Error(e.message));
+        }
+        else {
+            next(new Error('Failed to create user'));
         }
     }
 });
@@ -114,10 +88,15 @@ export const login_post = (req, res, next) => __awaiter(void 0, void 0, void 0, 
         const TOKEN = yield createJWT(user_doc.id);
         if (!TOKEN)
             throw new Error('Failed to generate JWT');
+        // TODO: Update the origin  url
+        res.header('Access-Control-Allow-Origin', CLIENT_BASE_URL);
         // 1 day in milliseconds = 1000 * 60 * 60 * 24
+        // TODO Change http=true, secure=true, sameSite="strict"
         res.cookie('jwt', TOKEN, {
             maxAge: 1000 * 60 * 60 * 24,
-            httpOnly: true,
+            httpOnly: false,
+            secure: false,
+            sameSite: 'lax',
         });
         const user = {
             name: user_doc.name,
@@ -142,10 +121,16 @@ export const login_post = (req, res, next) => __awaiter(void 0, void 0, void 0, 
 });
 export const logout_get = (_req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        res.cookie('jwt', '', { maxAge: 1 });
-        if (CLIENT_BASE_URL) {
-            res.redirect(CLIENT_BASE_URL);
-        }
+        // TODO: Update the origin  url
+        res.header('Access-Control-Allow-Origin', CLIENT_BASE_URL);
+        // 1 day in milliseconds = 1000 * 60 * 60 * 24
+        // TODO Change http=true, secure=true, sameSite="strict"
+        res.cookie('jwt', '', {
+            maxAge: 1,
+            httpOnly: false,
+            secure: false,
+            sameSite: 'lax',
+        });
         res.status(200).json({
             status: 'success',
             message: 'User successfully logged out',
