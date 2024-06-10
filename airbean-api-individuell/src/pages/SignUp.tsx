@@ -110,7 +110,7 @@ export default function SignUp() {
         });
         setTimeout(() => {
           navigate('/');
-        }, 1000);
+        }, 500);
       }
     } catch (e) {
       console.error(e);

@@ -14,11 +14,13 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import Layout from './pages/Layout.tsx';
 import ErrorElement from './components/ErrorElement.tsx';
-import { login } from './utils/api.ts';
+import { fetchMenu, fetchOffers, login } from './utils/api.ts';
 import { ThemeProvider } from './components/ThemeProvider';
 import { Toaster } from '@/components/ui/toaster';
 import { UserProvider } from './components/UserProvider';
 import { getSessionUser } from './utils/getSessionUser';
+import Menu from './pages/Menu.tsx';
+import Offers from './pages/Offers.tsx';
 
 const queryClient = new QueryClient();
 
@@ -59,15 +61,35 @@ const router = createBrowserRouter([
   },
   {
     path: 'dashboard',
-    loader: () => {
+    loader: async () => {
       const user = getSessionUser();
       if (!user) {
         return redirect('/login');
       }
+      // Menu
+      await queryClient.prefetchQuery({
+        queryKey: ['menu'],
+        queryFn: fetchMenu,
+      });
+      // Offers
+      await queryClient.prefetchQuery({
+        queryKey: ['offers'],
+        queryFn: fetchOffers,
+      });
       return null;
     },
     errorElement: <ErrorElement />,
     element: <Layout />,
+    children: [
+      {
+        index: true,
+        element: <Menu />,
+      },
+      {
+        path: 'offers',
+        element: <Offers />,
+      },
+    ],
   },
 ]);
 

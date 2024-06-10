@@ -46,6 +46,10 @@ export const signUp = async (user: USER) => {
       await axios.post(BASE_API_URL + 'signUp', form, {
         headers: {
           'Content-Type': 'multipart/form-data',
+          // TODO update url
+          'Access-Control-Allow-Origin': 'http://locahost:8000',
+          'Access-Control-Allow-Headers': 'origin, content-type, accept',
+          'Access-Control-Allow-Credentials': 'true',
         },
       });
     }
@@ -76,7 +80,15 @@ export const login = async (request: Request) => {
       password: data.get('password'),
     };
 
-    const res = await axios.post(BASE_API_URL + 'login', submission);
+    const res = await axios.post(BASE_API_URL + 'login', submission, {
+      withCredentials: true,
+      headers: {
+        // TODO update url
+        'Access-Control-Allow-Origin': 'http://locahost:8000',
+        'Access-Control-Allow-Headers': 'origin, content-type, accept',
+        'Access-Control-Allow-Credentials': 'true',
+      },
+    });
 
     setSessionUser(res.data.data);
 
@@ -93,5 +105,76 @@ export const login = async (request: Request) => {
     return {
       status: 'fail',
     };
+  }
+};
+
+export const logout = async () => {
+  try {
+    await axios.get(BASE_API_URL + 'logout', {
+      withCredentials: true,
+      headers: {
+        // TODO update url
+        'Access-Control-Allow-Origin': 'http://locahost:8000/logout',
+        'Access-Control-Allow-Headers': 'origin, content-type, accept',
+        'Access-Control-Allow-Credentials': 'true',
+      },
+    });
+  } catch (e) {
+    toast({
+      variant: 'destructive',
+      title: 'Logout Error',
+      description:
+        'Failed to logout. Please try again or close the current tab.',
+    });
+    throw new Error('Failed to logout');
+  }
+};
+
+export const fetchMenu = async () => {
+  try {
+    const req = await axios.get(BASE_API_URL + 'menu/', {
+      withCredentials: true,
+      headers: {
+        // TODO update url
+        'Access-Control-Allow-Origin': 'http://locahost:8000/logout',
+        'Access-Control-Allow-Headers': 'origin, content-type, accept',
+        'Access-Control-Allow-Credentials': 'true',
+      },
+    });
+
+    return req.data.data;
+  } catch (e) {
+    toast({
+      variant: 'destructive',
+      title: 'Menu error',
+      description:
+        'Failed to fetch the menu. Please try again or contact support.',
+    });
+    throw new Error('Failed to fetch the menu');
+  }
+};
+
+export const fetchOffers = async () => {
+  try {
+    const req = await axios.get(BASE_API_URL + 'offers/', {
+      withCredentials: true,
+      headers: {
+        // TODO update url
+        'Access-Control-Allow-Origin': 'http://locahost:8000/logout',
+        'Access-Control-Allow-Headers': 'origin, content-type, accept',
+        'Access-Control-Allow-Credentials': 'true',
+      },
+    });
+
+    console.log(req.data.data);
+    return req.data.data;
+  } catch (e) {
+    toast({
+      variant: 'destructive',
+      title: 'Menu error',
+      description:
+        'Failed to fetch the menu. Please try again or contact support.',
+    });
+    throw new Error('Failed to fetch the menu');
   }
 };

@@ -4,16 +4,23 @@ import coffee from '/svg/coffee-svg.svg';
 import { useUser } from './UserProvider';
 import { Button } from './ui/button';
 import { getSessionUser } from '@/utils/getSessionUser';
+import { logout } from '@/utils/api';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { User } from 'lucide-react';
 
 export default function Header() {
   const user = getSessionUser();
   const { setUser } = useUser();
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    setUser(null);
-
-    navigate('/', { replace: true });
+  const handleLogout = async () => {
+    try {
+      await logout();
+      setUser(null);
+      navigate('/', { replace: true });
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   return (
@@ -22,8 +29,19 @@ export default function Header() {
         <img src={coffee} alt='coffe logo' className='w-[24px]' />
         <span className='italic font-base pl-[1px]'>AirBean AB</span>
       </Link>
-      {user && <Button onClick={handleLogout}>Log out</Button>}
-      <ModeToggle />
+      {user ? (
+        <div className='flex items-center gap-4'>
+          <Avatar className='size-12'>
+            <AvatarImage src={user.image} />
+            <AvatarFallback>{<User />}</AvatarFallback>
+          </Avatar>
+          <span className='italic font-extralight'>{user.name}</span>
+          <Button onClick={handleLogout}>Log out</Button>
+          <ModeToggle />
+        </div>
+      ) : (
+        <ModeToggle />
+      )}
     </header>
   );
 }
