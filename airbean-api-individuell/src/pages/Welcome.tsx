@@ -1,7 +1,16 @@
+import { useUser } from '@/components/UserProvider';
 import VideoPlayer from '@/components/VideoPlayer';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function Welcome() {
+  const navigate = useNavigate();
+
+  const { user } = useUser();
+
+  if (user) {
+    navigate('/dashboard');
+  }
+
   return (
     <>
       <section className='w-full h-full flex justify-center overflow-hidden'>

@@ -1,6 +1,7 @@
 import { toast } from '@/components/ui/use-toast';
 import { USER } from '@/pages/SignUp';
 import axios from 'axios';
+import { setSessionUser } from './setSessionUser';
 
 const BASE_API_URL = import.meta.env.VITE_API_URL;
 
@@ -63,5 +64,34 @@ export const signUp = async (user: USER) => {
       });
     }
     throw new Error('Failed to create new user');
+  }
+};
+
+export const login = async (request: Request) => {
+  try {
+    if (!request) throw new Error('No form data provided');
+    const data = await request.formData();
+    const submission = {
+      email: data.get('email'),
+      password: data.get('password'),
+    };
+
+    const res = await axios.post(BASE_API_URL + 'login', submission);
+
+    setSessionUser(res.data.data);
+
+    return {
+      status: 'success',
+    };
+  } catch (e) {
+    toast({
+      variant: 'destructive',
+      title: 'Login Error',
+      description: 'Failed to login. Check your credential and try again',
+    });
+
+    return {
+      status: 'fail',
+    };
   }
 };

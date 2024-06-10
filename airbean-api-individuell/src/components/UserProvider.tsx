@@ -1,3 +1,4 @@
+import { getSessionUser } from '@/utils/getSessionUser';
 import { createContext, useContext, useState } from 'react';
 
 type User = {
@@ -14,25 +15,27 @@ type UserProviderProps = {
 
 type UserProviderState = {
   user: User | null;
-  setUser: (user: User) => void;
+  setUser: (user: User | null) => void;
 };
 
 const initialState: UserProviderState = {
-  user: null,
+  user: getSessionUser(),
   setUser: () => null,
 };
 
 const UserProviderContext = createContext<UserProviderState>(initialState);
 
-export const UserProvider = ({ children, defaultUser }: UserProviderProps) => {
-  const [user, setUser] = useState<User | null>(
-    defaultUser ? defaultUser : null
-  );
+export const UserProvider = ({ children }: UserProviderProps) => {
+  const [user, setUser] = useState<User | null>(getSessionUser());
 
   const value = {
     user,
-    setUser: (user: User) => {
-      sessionStorage.setItem('user', JSON.stringify(user));
+    setUser: (user: User | null) => {
+      if (!user) {
+        sessionStorage.removeItem('user');
+      } else {
+        sessionStorage.setItem('user', JSON.stringify(user));
+      }
       setUser(user);
     },
   };

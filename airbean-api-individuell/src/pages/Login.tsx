@@ -11,10 +11,10 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import VideoPlayer from '@/components/VideoPlayer';
 import { Button } from '@/components/ui/button';
-const BASE_API_URL = import.meta.env.VITE_API_URL;
 
 export default function Login() {
   const navigate = useNavigate();
+
   return (
     <>
       <section className='w-screen h-screen flex items-center justify-center z-30'>
@@ -27,21 +27,29 @@ export default function Login() {
           </CardHeader>
           <CardContent>
             <Form
+              action={'/login'}
               method='post'
-              action={BASE_API_URL + 'login'}
               className='flex flex-col gap-2'
             >
               <div className='flex flex-col gap-2'>
                 <Label htmlFor='email'>Email</Label>
-                <Input id='email' type='email' autoComplete='true' required />
+                <Input
+                  id='email'
+                  name='email'
+                  type='email'
+                  autoComplete='true'
+                  required
+                />
               </div>
               <div className='flex flex-col gap-2'>
                 <Label htmlFor='password'>Password</Label>
                 <Input
                   id='password'
                   type='password'
+                  name='password'
                   autoComplete='true'
                   required
+                  minLength={5}
                 />
               </div>
 
