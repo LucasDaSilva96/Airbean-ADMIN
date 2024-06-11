@@ -21,6 +21,8 @@ import { UserProvider } from './components/UserProvider';
 import { getSessionUser } from './utils/getSessionUser';
 import Menu from './pages/Menu.tsx';
 import Offers from './pages/Offers.tsx';
+import AddMenuItem from './pages/AddMenuItem.tsx';
+import CreateOffer from './pages/CreateOffer.tsx';
 
 const queryClient = new QueryClient();
 
@@ -88,6 +90,14 @@ const router = createBrowserRouter([
       {
         path: 'offers',
         element: <Offers />,
+      },
+      {
+        path: 'addMenuItem',
+        element: <AddMenuItem />,
+      },
+      {
+        path: 'createOffer',
+        element: <CreateOffer />,
       },
     ],
   },

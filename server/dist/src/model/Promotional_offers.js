@@ -52,9 +52,5 @@ promotionalSchema.pre('save', function (next) {
         }
     });
 });
-promotionalSchema.pre(['find'], function (next) {
-    this.find({ active: true });
-    next();
-});
 export const Promotional_offers_Model = mongoose.model('promotional_offer', promotionalSchema);
 //# sourceMappingURL=Promotional_offers.js.map

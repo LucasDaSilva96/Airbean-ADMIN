@@ -24,14 +24,16 @@ export default function Header() {
   };
 
   return (
-    <header className='w-screen py-2 px-2 flex items-center justify-between z-50 backdrop-blur-sm'>
+    <header className='w-screen py-2 px-2 flex items-center justify-between z-50 backdrop-blur-lg md:backdrop-blur-none'>
       <Link to='/' className='flex items-center gap-1'>
-        <img src={coffee} alt='coffe logo' className='w-[24px]' />
-        <span className='italic font-base pl-[1px]'>AirBean AB</span>
+        <img src={coffee} alt='coffee logo' className='w-[24px]' />
+        <span className='italic font-base pl-[1px] text-white md:text-inherit'>
+          AirBean AB
+        </span>
       </Link>
       {user ? (
         <div className='flex items-center gap-4'>
-          <Avatar className='size-12'>
+          <Avatar className='size-10'>
             <AvatarImage src={user.image} />
             <AvatarFallback>{<User />}</AvatarFallback>
           </Avatar>

@@ -2,7 +2,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { useQueryClient } from '@tanstack/react-query';
 import MenuCard from '@/components/MenuCard';
 
-type MenuItem = {
+export type MenuItem = {
   created_at: string;
   desc: string;
   image: string;
@@ -11,7 +11,7 @@ type MenuItem = {
   _id: string;
 };
 
-export default function Offers() {
+export default function Menu() {
   const queryClient = useQueryClient();
   const menu: MenuItem[] = queryClient.getQueryData(['menu'])!;
 

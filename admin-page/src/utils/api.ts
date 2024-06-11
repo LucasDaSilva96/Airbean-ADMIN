@@ -166,7 +166,6 @@ export const fetchOffers = async () => {
       },
     });
 
-    console.log(req.data.data);
     return req.data.data;
   } catch (e) {
     toast({

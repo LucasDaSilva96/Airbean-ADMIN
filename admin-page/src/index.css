@@ -82,3 +82,9 @@ body {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
+
+#welcome-bg {
+  background: url('https://res.cloudinary.com/dqx1ejydp/image/upload/f_auto,q_auto/v1/Airbean/ixaoe2wvjcbsbpbhru2f');
+  background-repeat: no-repeat;
+  background-size: auto;
+}

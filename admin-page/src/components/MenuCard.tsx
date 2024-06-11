@@ -8,7 +8,7 @@ import {
 import { Button } from './ui/button';
 import LazyImage from './LazyImage';
 
-type MenuItem = {
+export type MenuItem = {
   created_at: string;
   desc: string;
   image: string;

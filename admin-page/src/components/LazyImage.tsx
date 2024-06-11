@@ -12,6 +12,7 @@ type ImageProps = {
   width: string | number;
   caption?: string;
   border_Radius?: string | number;
+  styles?: object;
 };
 
 export default function LazyImage({
@@ -20,6 +21,7 @@ export default function LazyImage({
   width,
   caption,
   border_Radius,
+  styles,
 }: ImageProps) {
   return (
     <div>
@@ -30,7 +32,10 @@ export default function LazyImage({
         width={width}
         threshold={100}
         effect='blur'
-        style={{ borderRadius: border_Radius ? `${border_Radius}px` : '0px' }}
+        style={{
+          borderRadius: border_Radius ? `${border_Radius}px` : '0px',
+          ...styles,
+        }}
       />
       {caption && <span>{caption}</span>}
     </div>

@@ -38,8 +38,8 @@ export default function DashboardSideNav() {
           location === '/dashboard' ? 'bg-[#bfc0c065]' : ''
         } rounded-md py-2 px-4 flex item justify-between transition-all cursor-pointer`}
       >
+        {menu.length >= 0 && <Badge variant='outline'>{menu.length}</Badge>}
         <p>Manage menu</p>
-        <Badge variant='outline'>{menu.length}</Badge>
         <Coffee />
       </CardContent>
 
@@ -49,13 +49,17 @@ export default function DashboardSideNav() {
           location === '/dashboard/offers' ? 'bg-[#bfc0c065]' : ''
         } rounded-md py-2 px-4 flex item justify-between transition-all cursor-pointer`}
       >
+        {offers.length >= 0 && <Badge variant='outline'>{offers.length}</Badge>}
         <p>Manage offers</p>
-        <Badge variant='outline'>{offers.length}</Badge>
         <DollarSign />
       </CardContent>
       <CardFooter className='flex flex-col gap-4 mt-2'>
-        <Button className='w-[160px]'>Add new menu item</Button>
-        <Button className='w-[160px]'>Create new offer</Button>
+        <Button className='w-[160px]' onClick={() => navigate('addMenuItem')}>
+          Add new menu item
+        </Button>
+        <Button className='w-[160px]' onClick={() => navigate('createOffer')}>
+          Create new offer
+        </Button>
       </CardFooter>
     </Card>
   );
