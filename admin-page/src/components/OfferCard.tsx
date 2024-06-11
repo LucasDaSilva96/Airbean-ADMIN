@@ -27,7 +27,7 @@ export default function OfferCard({ offer }: OfferProps) {
           </Badge>
         </CardDescription>
       </CardHeader>
-      <CardContent className='flex flex-col gap-4 max-h-[200px] overflow-y-auto'>
+      <CardContent className='flex flex-col gap-4 max-h-[400px] overflow-y-auto'>
         {offer.promotional_items.map((item) => (
           <OfferItemCard item={item} key={item._id} />
         ))}

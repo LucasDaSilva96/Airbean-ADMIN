@@ -53,6 +53,7 @@ export const uploadImageToCloud = async (filename: string) => {
     const imageUrl = result.secure_url;
     return imageUrl;
   } catch (e) {
+    console.log(e);
     throw new Error('Failed to upload image');
   }
 };

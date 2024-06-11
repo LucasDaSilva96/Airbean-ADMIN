@@ -2,6 +2,7 @@ import { toast } from '@/components/ui/use-toast';
 import { USER } from '@/pages/SignUp';
 import axios from 'axios';
 import { setSessionUser } from './setSessionUser';
+import { MenuItem } from '@/pages/Menu';
 
 const BASE_API_URL = import.meta.env.VITE_API_URL;
 
@@ -175,5 +176,99 @@ export const fetchOffers = async () => {
         'Failed to fetch the menu. Please try again or contact support.',
     });
     throw new Error('Failed to fetch the menu');
+  }
+};
+
+type MenuItemSubmission = {
+  title: FormDataEntryValue | null;
+  desc: FormDataEntryValue | null;
+  price: FormDataEntryValue | null;
+  image?: FormDataEntryValue | null;
+};
+
+export const createMenuItem = async (request: Request) => {
+  try {
+    if (!request) throw new Error('No form data provided');
+    const data = await request.formData();
+    const submission: MenuItemSubmission = {
+      title: data.get('title'),
+      desc: data.get('description'),
+      price: data.get('price'),
+      image: data.get('image'),
+    };
+
+    await axios.post(BASE_API_URL + 'menu/', submission, {
+      withCredentials: true,
+      headers: {
+        // TODO update url
+        'Access-Control-Allow-Origin': 'http://locahost:8000',
+        'Access-Control-Allow-Headers': 'origin, content-type, accept',
+        'Access-Control-Allow-Credentials': 'true',
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+
+    toast({
+      variant: 'default',
+      title: 'Success',
+      description: 'New item successfully created',
+    });
+
+    return {
+      status: 'success',
+    };
+  } catch (e) {
+    toast({
+      variant: 'destructive',
+      title: 'Login Error',
+      description: 'Failed to login. Check your credential and try again',
+    });
+
+    return {
+      status: 'fail',
+    };
+  }
+};
+
+export type OfferSubmission = {
+  title: string;
+  promotional_items: MenuItem[];
+  price: number | string;
+};
+
+export const createOffer = async (offer: OfferSubmission) => {
+  try {
+    if (!offer) throw new Error('No offer provided');
+
+    await axios.post(BASE_API_URL + 'offers/', offer, {
+      withCredentials: true,
+      headers: {
+        // TODO update url
+        'Access-Control-Allow-Origin': 'http://locahost:8000',
+        'Access-Control-Allow-Headers': 'origin, content-type, accept',
+        'Access-Control-Allow-Credentials': 'true',
+        // 'Content-Type': 'multipart/form-data',
+      },
+    });
+
+    toast({
+      variant: 'default',
+      title: 'Success',
+      description: 'New offer successfully created',
+    });
+
+    return {
+      status: 'success',
+    };
+  } catch (e) {
+    toast({
+      variant: 'destructive',
+      title: 'Login Error',
+      description: 'Failed to login. Check your credential and try again',
+    });
+
+    return {
+      status: 'fail',
+    };
   }
 };

@@ -1,5 +1,6 @@
 import { RequestHandler } from 'express';
 import { MenuModel } from '../model/Menu.js';
+import { uploadImageToCloud } from '../utils/multer_upload.js';
 
 export const menu_get: RequestHandler = async (_req, res, _next) => {
   try {
@@ -23,7 +24,18 @@ export const menu_get: RequestHandler = async (_req, res, _next) => {
 
 export const menu_create_post: RequestHandler = async (req, res, _next) => {
   try {
-    await MenuModel.create({ ...req.body });
+    const { title, desc, price } = req.body;
+    if (!title || !desc || !price)
+      throw new Error('Please provide a title, description and price');
+
+    const image = req.file;
+
+    if (image) {
+      const IMAGE = await uploadImageToCloud(image.filename);
+      await MenuModel.create({ title, desc, price, image: IMAGE });
+    } else {
+      await MenuModel.create({ title, desc, price });
+    }
 
     res.status(201).json({
       status: 'success',

@@ -8,6 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { MenuModel } from '../model/Menu.js';
+import { uploadImageToCloud } from '../utils/multer_upload.js';
 export const menu_get = (_req, res, _next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const menu = yield MenuModel.find();
@@ -29,7 +30,17 @@ export const menu_get = (_req, res, _next) => __awaiter(void 0, void 0, void 0, 
 // Protected actions
 export const menu_create_post = (req, res, _next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        yield MenuModel.create(Object.assign({}, req.body));
+        const { title, desc, price } = req.body;
+        if (!title || !desc || !price)
+            throw new Error('Please provide a title, description and price');
+        const image = req.file;
+        if (image) {
+            const IMAGE = yield uploadImageToCloud(image.filename);
+            yield MenuModel.create({ title, desc, price, image: IMAGE });
+        }
+        else {
+            yield MenuModel.create({ title, desc, price });
+        }
         res.status(201).json({
             status: 'success',
             message: 'Menu item successfully created',

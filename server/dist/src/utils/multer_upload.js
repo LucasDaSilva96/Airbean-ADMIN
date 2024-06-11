@@ -53,6 +53,7 @@ export const uploadImageToCloud = (filename) => __awaiter(void 0, void 0, void 0
         return imageUrl;
     }
     catch (e) {
+        console.log(e);
         throw new Error('Failed to upload image');
     }
 });
