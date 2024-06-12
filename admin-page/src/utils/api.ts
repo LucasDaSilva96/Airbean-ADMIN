@@ -24,7 +24,7 @@ export const signUp = async (user: USER) => {
       form.append('password_confirm', user.password_confirm);
       form.append('role', user.role);
 
-      await axios.post(BASE_API_URL + 'signUp', form, {
+      await axios.post(BASE_API_URL + '/api/signUp', form, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -44,11 +44,11 @@ export const signUp = async (user: USER) => {
       form.append('password_confirm', user.password_confirm);
       form.append('role', user.role);
       form.append('image', user.image);
-      await axios.post(BASE_API_URL + 'signUp', form, {
+      await axios.post(BASE_API_URL + '/api/signUp', form, {
         headers: {
           'Content-Type': 'multipart/form-data',
           // TODO update url
-          'Access-Control-Allow-Origin': 'http://locahost:8000',
+          'Access-Control-Allow-Origin': BASE_API_URL,
           'Access-Control-Allow-Headers': 'origin, content-type, accept',
           'Access-Control-Allow-Credentials': 'true',
         },
@@ -81,11 +81,11 @@ export const login = async (request: Request) => {
       password: data.get('password'),
     };
 
-    const res = await axios.post(BASE_API_URL + 'login', submission, {
+    const res = await axios.post(BASE_API_URL + '/api/login', submission, {
       withCredentials: true,
       headers: {
         // TODO update url
-        'Access-Control-Allow-Origin': 'http://locahost:8000',
+        'Access-Control-Allow-Origin': BASE_API_URL,
         'Access-Control-Allow-Headers': 'origin, content-type, accept',
         'Access-Control-Allow-Credentials': 'true',
       },
@@ -111,7 +111,7 @@ export const login = async (request: Request) => {
 
 export const logout = async () => {
   try {
-    await axios.get(BASE_API_URL + 'logout', {
+    await axios.get(BASE_API_URL + '/api/logout', {
       withCredentials: true,
       headers: {
         // TODO update url
@@ -133,7 +133,7 @@ export const logout = async () => {
 
 export const fetchMenu = async () => {
   try {
-    const req = await axios.get(BASE_API_URL + 'menu/', {
+    const req = await axios.get(BASE_API_URL + '/api/menu/', {
       withCredentials: true,
       headers: {
         // TODO update url
@@ -157,7 +157,7 @@ export const fetchMenu = async () => {
 
 export const fetchOffers = async () => {
   try {
-    const req = await axios.get(BASE_API_URL + 'offers/', {
+    const req = await axios.get(BASE_API_URL + '/api/offers/', {
       withCredentials: true,
       headers: {
         // TODO update url
@@ -198,11 +198,11 @@ export const createMenuItem = async (request: Request) => {
       image: data.get('image'),
     };
 
-    await axios.post(BASE_API_URL + 'menu/', submission, {
+    await axios.post(BASE_API_URL + '/api/menu/', submission, {
       withCredentials: true,
       headers: {
         // TODO update url
-        'Access-Control-Allow-Origin': 'http://locahost:8000',
+        'Access-Control-Allow-Origin': BASE_API_URL,
         'Access-Control-Allow-Headers': 'origin, content-type, accept',
         'Access-Control-Allow-Credentials': 'true',
         'Content-Type': 'multipart/form-data',
@@ -231,21 +231,60 @@ export const createMenuItem = async (request: Request) => {
   }
 };
 
+export const deleteMenuItem = async (id: string) => {
+  try {
+    if (!id) throw new Error('No id provided');
+
+    await axios.delete(BASE_API_URL + `/api/menu/${id}`, {
+      withCredentials: true,
+      headers: {
+        // TODO update url
+        'Access-Control-Allow-Origin': BASE_API_URL,
+        'Access-Control-Allow-Headers': 'origin, content-type, accept',
+        'Access-Control-Allow-Credentials': 'true',
+        // 'Content-Type': 'multipart/form-data',
+      },
+    });
+
+    toast({
+      variant: 'default',
+      title: 'Success',
+      description: 'Item successfully deleted',
+    });
+
+    return {
+      status: 'success',
+    };
+  } catch (e) {
+    toast({
+      variant: 'destructive',
+      title: 'Delete Error',
+      description: 'Failed to delete. Please try again or contact support.',
+    });
+
+    return {
+      status: 'fail',
+    };
+  }
+};
+
 export type OfferSubmission = {
   title: string;
   promotional_items: MenuItem[];
   price: number | string;
+  _id?: string;
+  active?: boolean;
 };
 
 export const createOffer = async (offer: OfferSubmission) => {
   try {
     if (!offer) throw new Error('No offer provided');
 
-    await axios.post(BASE_API_URL + 'offers/', offer, {
+    await axios.post(BASE_API_URL + '/api/offers/', offer, {
       withCredentials: true,
       headers: {
         // TODO update url
-        'Access-Control-Allow-Origin': 'http://locahost:8000',
+        'Access-Control-Allow-Origin': BASE_API_URL,
         'Access-Control-Allow-Headers': 'origin, content-type, accept',
         'Access-Control-Allow-Credentials': 'true',
         // 'Content-Type': 'multipart/form-data',
@@ -274,7 +313,7 @@ export const createOffer = async (offer: OfferSubmission) => {
   }
 };
 
-export const pathMenuItem = async (request: Request) => {
+export const patchMenuItem = async (request: Request) => {
   try {
     if (!request) throw new Error('No offer provided');
 
@@ -288,11 +327,11 @@ export const pathMenuItem = async (request: Request) => {
       id: data.get('id'),
     };
 
-    await axios.patch(BASE_API_URL + `menu/${submission.id}`, submission, {
+    await axios.patch(BASE_API_URL + `/api/menu/${submission.id}`, submission, {
       withCredentials: true,
       headers: {
         // TODO update url
-        'Access-Control-Allow-Origin': 'http://locahost:8000',
+        'Access-Control-Allow-Origin': BASE_API_URL,
         'Access-Control-Allow-Headers': 'origin, content-type, accept',
         'Access-Control-Allow-Credentials': 'true',
         'Content-Type': 'multipart/form-data',
@@ -314,6 +353,88 @@ export const pathMenuItem = async (request: Request) => {
       title: 'Update fail',
       description:
         'Failed to update menu item. Please try again or contact support',
+    });
+
+    return {
+      status: 'fail',
+    };
+  }
+};
+
+export const patchOffer = async (offer: OfferSubmission) => {
+  try {
+    if (!offer) throw new Error('No offer provided');
+
+    const submission = {
+      title: offer.title,
+      price: offer.price,
+      promotional_items: offer.promotional_items,
+      active: offer.active,
+    };
+
+    await axios.patch(BASE_API_URL + `/api/offers/${offer._id}`, submission, {
+      withCredentials: true,
+      headers: {
+        // TODO update url
+        'Access-Control-Allow-Origin': BASE_API_URL,
+        'Access-Control-Allow-Headers': 'origin, content-type, accept',
+        'Access-Control-Allow-Credentials': 'true',
+        // 'Content-Type': 'multipart/form-data',
+      },
+    });
+
+    toast({
+      variant: 'default',
+      title: 'Success',
+      description: 'Offer successfully updated',
+    });
+
+    return {
+      status: 'success',
+    };
+  } catch (e) {
+    toast({
+      variant: 'destructive',
+      title: 'Update fail',
+      description:
+        'Failed to update offer. Please try again or contact support',
+    });
+
+    return {
+      status: 'fail',
+    };
+  }
+};
+
+export const deleteOffer = async (id: string) => {
+  try {
+    if (!id) throw new Error('No id provided');
+
+    await axios.delete(BASE_API_URL + `/api/offers/${id}`, {
+      withCredentials: true,
+      headers: {
+        // TODO update url
+        'Access-Control-Allow-Origin': BASE_API_URL,
+        'Access-Control-Allow-Headers': 'origin, content-type, accept',
+        'Access-Control-Allow-Credentials': 'true',
+        // 'Content-Type': 'multipart/form-data',
+      },
+    });
+
+    toast({
+      variant: 'default',
+      title: 'Success',
+      description: 'Offer successfully deleted',
+    });
+
+    return {
+      status: 'success',
+    };
+  } catch (e) {
+    toast({
+      variant: 'destructive',
+      title: 'Delete Error',
+      description: 'Failed to delete. Please try again or contact support.',
     });
 
     return {

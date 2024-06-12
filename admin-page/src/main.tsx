@@ -19,7 +19,7 @@ import {
   fetchMenu,
   fetchOffers,
   login,
-  pathMenuItem,
+  patchMenuItem,
 } from './utils/api.ts';
 import { ThemeProvider } from './components/ThemeProvider';
 import { Toaster } from '@/components/ui/toaster';
@@ -30,6 +30,7 @@ import Offers from './pages/Offers.tsx';
 import AddMenuItem from './pages/AddMenuItem.tsx';
 import CreateOffer from './pages/CreateOffer.tsx';
 import EditMenu from './pages/EditMenu.tsx';
+import EditOffer from './pages/EditOffer.tsx';
 
 const queryClient = new QueryClient();
 
@@ -85,11 +86,15 @@ const router = createBrowserRouter([
       await queryClient.prefetchQuery({
         queryKey: ['menu'],
         queryFn: fetchMenu,
+        staleTime: Infinity,
+        gcTime: Infinity,
       });
       // Offers
       await queryClient.prefetchQuery({
         queryKey: ['offers'],
         queryFn: fetchOffers,
+        staleTime: Infinity,
+        gcTime: Infinity,
       });
       return null;
     },
@@ -125,7 +130,21 @@ const router = createBrowserRouter([
         path: 'menuEdit/:id',
         element: <EditMenu />,
         action: async ({ request }) => {
-          const req = await pathMenuItem(request);
+          const req = await patchMenuItem(request);
+          if (req.status === 'success') {
+            await queryClient.invalidateQueries({
+              queryKey: ['menu'],
+            });
+            return redirect('/dashboard');
+          }
+          return null;
+        },
+      },
+      {
+        path: 'offerEdit/:id',
+        element: <EditOffer />,
+        action: async ({ request }) => {
+          const req = await patchMenuItem(request);
           if (req.status === 'success') {
             await queryClient.invalidateQueries({
               queryKey: ['menu'],

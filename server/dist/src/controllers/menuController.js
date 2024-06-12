@@ -9,7 +9,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import { MenuModel } from '../model/Menu.js';
 import { uploadImageToCloud } from '../utils/multer_upload.js';
-export const menu_get = (_req, res, _next) => __awaiter(void 0, void 0, void 0, function* () {
+import { Promotional_offers_Model } from '../model/Promotional_offers.js';
+export const menu_get = (_req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const menu = yield MenuModel.find();
         res.status(200).json({
@@ -19,16 +20,11 @@ export const menu_get = (_req, res, _next) => __awaiter(void 0, void 0, void 0, 
         });
     }
     catch (e) {
-        if (typeof e === 'string') {
-            throw new Error(e.toLocaleLowerCase());
-        }
-        else if (e instanceof Error) {
-            throw new Error(e.message);
-        }
+        next(new Error('Failed to fetch menu items. Line 16'));
     }
 });
 // Protected actions
-export const menu_create_post = (req, res, _next) => __awaiter(void 0, void 0, void 0, function* () {
+export const menu_create_post = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { title, desc, price } = req.body;
         if (!title || !desc || !price)
@@ -47,15 +43,10 @@ export const menu_create_post = (req, res, _next) => __awaiter(void 0, void 0, v
         });
     }
     catch (e) {
-        if (typeof e === 'string') {
-            throw new Error(e.toLocaleLowerCase());
-        }
-        else if (e instanceof Error) {
-            throw new Error(e.message);
-        }
+        next(new Error('Failed to create menu item. Line 46'));
     }
 });
-export const menu_update_patch = (req, res, _next) => __awaiter(void 0, void 0, void 0, function* () {
+export const menu_update_patch = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const image = req.file;
         let item = null;
@@ -79,34 +70,34 @@ export const menu_update_patch = (req, res, _next) => __awaiter(void 0, void 0, 
         });
     }
     catch (e) {
-        if (typeof e === 'string') {
-            throw new Error(e.toLocaleLowerCase());
-        }
-        else if (e instanceof Error) {
-            throw new Error(e.message);
-        }
+        next(new Error('Failed to update menu item. Line 83'));
     }
 });
-export const menu_delete = (req, res, _next) => __awaiter(void 0, void 0, void 0, function* () {
+export const menu_delete = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { itemID } = req.params;
         if (!itemID)
             throw new Error('No item id provided');
-        const item = yield MenuModel.findByIdAndDelete(itemID);
-        if (!item)
-            throw new Error('Failed to delete item');
+        yield MenuModel.findByIdAndDelete(itemID);
+        const offers = yield Promotional_offers_Model.find();
+        if (offers.length > 0) {
+            for (const offer of offers) {
+                if (offer.promotional_items.length > 0) {
+                    const index = offer.promotional_items.findIndex((el) => el.id === itemID);
+                    if (index >= 0) {
+                        offer.promotional_items.pull(itemID);
+                        yield offer.save();
+                    }
+                }
+            }
+        }
         res.status(200).json({
             status: 'success',
             message: 'Item successfully deleted',
         });
     }
     catch (e) {
-        if (typeof e === 'string') {
-            throw new Error(e.toLocaleLowerCase());
-        }
-        else if (e instanceof Error) {
-            throw new Error(e.message);
-        }
+        next(new Error('Failed to delete menu item. Line 122'));
     }
 });
 //# sourceMappingURL=menuController.js.map

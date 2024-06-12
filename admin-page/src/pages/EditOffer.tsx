@@ -5,30 +5,43 @@ import {
   CardTitle,
   CardDescription,
 } from '@/components/ui/card';
-import { Form } from 'react-router-dom';
+import { Form, redirect, useParams } from 'react-router-dom';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import Select from 'react-select';
 import { useQueryClient } from '@tanstack/react-query';
 import { MenuItem } from './Menu';
-import { useState } from 'react';
-import { createOffer, OfferSubmission } from '@/utils/api';
+import { useMemo, useState } from 'react';
+import { OfferSubmission, patchOffer } from '@/utils/api';
 import { toast } from '@/components/ui/use-toast';
+import { MenuItemOption } from './CreateOffer';
+import {
+  Select as SELECT,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
-export type MenuItemOption = {
-  value: string;
-  label: string;
-};
-
-export default function CreateOffer() {
+export default function EditOffer() {
   const queryClient = useQueryClient();
+  const { id } = useParams();
+  const offers: OfferSubmission[] = queryClient.getQueryData(['offers'])!;
   const menu: MenuItem[] = queryClient.getQueryData(['menu'])!;
-  const [offerObj, setOfferObj] = useState<OfferSubmission>({
-    title: '',
-    price: '',
-    promotional_items: [],
-  });
+  const [offerObj, setOfferObj] = useState(offers.find((el) => el._id === id));
+
+  const defaultOptions = useMemo(() => {
+    if (offerObj) {
+      return offerObj.promotional_items.map((item) => {
+        return { value: item._id, label: `${item.title} - ${item.price}$` };
+      });
+    }
+  }, []);
+
+  if (!offerObj) {
+    return <h1 className='text-center'>Couldn't find the selected offer</h1>;
+  }
 
   const options = menu.map((item) => {
     return { value: item._id, label: `${item.title} - ${item.price}$` };
@@ -37,13 +50,16 @@ export default function CreateOffer() {
   const handleMenuItemChange = (option: readonly MenuItemOption[]) => {
     const resultArray: MenuItem[] = [];
 
-    option.map((item) => {
-      menu.map((el) => {
-        if (el._id === item.value) {
-          resultArray.push(el);
+    if (option.length > 0) {
+      for (const menuItem of menu) {
+        for (const optionItem of option) {
+          if (menuItem._id === optionItem.value) {
+            resultArray.push(menuItem);
+          }
         }
-      });
-    });
+      }
+    }
+
     setOfferObj({ ...offerObj, promotional_items: resultArray });
   };
 
@@ -55,6 +71,13 @@ export default function CreateOffer() {
     setOfferObj({ ...offerObj, price: +e.target.value });
   };
 
+  const handleStatus = (e: string) => {
+    setOfferObj({
+      ...offerObj,
+      active: e === 'true' ? true : false,
+    });
+  };
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (
@@ -63,7 +86,7 @@ export default function CreateOffer() {
       offerObj.promotional_items.length > 0
     ) {
       try {
-        await createOffer(offerObj);
+        const res = await patchOffer(offerObj);
 
         await queryClient.invalidateQueries({
           queryKey: ['offers'],
@@ -71,7 +94,9 @@ export default function CreateOffer() {
           refetchType: 'all',
         });
 
-        window.location.reload();
+        if (res.status === 'success') {
+          return redirect('/');
+        }
       } catch (e) {
         toast({
           variant: 'destructive',
@@ -92,7 +117,7 @@ export default function CreateOffer() {
     <Card>
       <CardHeader>
         <CardTitle>Offer</CardTitle>
-        <CardDescription>Create a offer here</CardDescription>
+        <CardDescription>Update offer here</CardDescription>
       </CardHeader>
       <CardContent>
         <Form className='flex flex-col gap-4' onSubmit={handleSubmit}>
@@ -104,9 +129,26 @@ export default function CreateOffer() {
               placeholder='Title*'
               name='title'
               required
+              defaultValue={offerObj.title}
               minLength={1}
               onInput={handleTitle}
             />
+          </div>
+          <div className='flex flex-col gap-2 max-w-[375px]'>
+            <span className='font-medium text-sm'>Active Status</span>
+            <SELECT
+              onValueChange={handleStatus}
+              name='active'
+              value={offerObj.active === true ? 'true' : 'false'}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder='Select Status' />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value='true'>Active</SelectItem>
+                <SelectItem value='false'>Not active</SelectItem>
+              </SelectContent>
+            </SELECT>
           </div>
 
           <div className='flex flex-col gap-2 max-w-[375px]'>
@@ -117,6 +159,7 @@ export default function CreateOffer() {
               placeholder='Price*'
               name='price'
               required
+              defaultValue={offerObj.price}
               min={1}
               onInput={handlePrice}
             />
@@ -128,11 +171,12 @@ export default function CreateOffer() {
             placeholder='Select items from the menu'
             options={options}
             className='basic-multi-select'
+            defaultValue={defaultOptions}
             classNamePrefix='select'
             onChange={handleMenuItemChange}
           />
 
-          <Button type='submit'>Create</Button>
+          <Button type='submit'>Save</Button>
         </Form>
       </CardContent>
     </Card>

@@ -26,7 +26,7 @@ export default function Offers() {
         </CardContent>
       ) : (
         <CardContent>
-          <h3>Empty menu</h3>
+          <h2 className='text-center py-2'>No offer yet created</h2>
         </CardContent>
       )}
     </Card>

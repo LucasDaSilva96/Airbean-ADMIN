@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express';
 import { Promotional_offers_Model } from '../model/Promotional_offers.js';
 
-export const promotional_get: RequestHandler = async (_req, res, _next) => {
+export const promotional_get: RequestHandler = async (_req, res, next) => {
   try {
     const promotional_offers = await Promotional_offers_Model.find();
 
@@ -11,11 +11,7 @@ export const promotional_get: RequestHandler = async (_req, res, _next) => {
       data: promotional_offers,
     });
   } catch (e) {
-    if (typeof e === 'string') {
-      throw new Error(e.toLocaleLowerCase());
-    } else if (e instanceof Error) {
-      throw new Error(e.message);
-    }
+    next(new Error('Failed to fetch offers. Line 14'));
   }
 };
 
@@ -24,7 +20,7 @@ export const promotional_get: RequestHandler = async (_req, res, _next) => {
 export const promotional_create_post: RequestHandler = async (
   req,
   res,
-  _next
+  next
 ) => {
   try {
     const offer = await Promotional_offers_Model.create({ ...req.body });
@@ -35,18 +31,14 @@ export const promotional_create_post: RequestHandler = async (
       data: offer,
     });
   } catch (e) {
-    if (typeof e === 'string') {
-      throw new Error(e.toLocaleLowerCase());
-    } else if (e instanceof Error) {
-      throw new Error(e.message);
-    }
+    next(new Error('Failed to create offer. Line 34'));
   }
 };
 
 export const promotional_update_patch: RequestHandler = async (
   req,
   res,
-  _next
+  next
 ) => {
   try {
     const { offerID } = req.params;
@@ -64,35 +56,23 @@ export const promotional_update_patch: RequestHandler = async (
       message: 'Promotional offer successfully updated',
     });
   } catch (e) {
-    if (typeof e === 'string') {
-      throw new Error(e.toLocaleLowerCase());
-    } else if (e instanceof Error) {
-      throw new Error(e.message);
-    }
+    next(new Error('Failed to update offer. Line 59'));
   }
 };
 
-export const promotional_delete: RequestHandler = async (req, res, _next) => {
+export const promotional_delete: RequestHandler = async (req, res, next) => {
   try {
     const { offerID } = req.params;
 
     if (!offerID) throw new Error('No offer id provided');
 
-    const offer = await Promotional_offers_Model.findByIdAndUpdate(offerID, {
-      active: false,
-    });
-
-    if (!offer) throw new Error('Failed to delete offer');
+    await Promotional_offers_Model.findByIdAndDelete(offerID);
 
     res.status(202).json({
       status: 'success',
       message: 'Promotional offer successfully deleted',
     });
   } catch (e) {
-    if (typeof e === 'string') {
-      throw new Error(e.toLocaleLowerCase());
-    } else if (e instanceof Error) {
-      throw new Error(e.message);
-    }
+    next(new Error('Failed to delete offer. Line 76'));
   }
 };

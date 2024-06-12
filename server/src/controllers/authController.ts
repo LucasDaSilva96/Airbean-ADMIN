@@ -64,13 +64,7 @@ export const signUp_post: RequestHandler = async (req, res, next) => {
       data: new_user,
     });
   } catch (e) {
-    if (typeof e === 'string') {
-      next(new Error(e.toLocaleLowerCase()));
-    } else if (e instanceof Error) {
-      next(new Error(e.message));
-    } else {
-      next(new Error('Failed to create user'));
-    }
+    next(new Error('Failed to create a new user. Line 67'));
   }
 };
 
@@ -116,11 +110,7 @@ export const login_post: RequestHandler = async (req, res, next) => {
       data: user,
     });
   } catch (e) {
-    if (typeof e === 'string') {
-      next(new Error(e.toLocaleLowerCase()));
-    } else if (e instanceof Error) {
-      next(new Error(e.message));
-    }
+    next(new Error('Failed to log the user in. Line 113'));
   }
 };
 
@@ -143,10 +133,6 @@ export const logout_get: RequestHandler = async (_req, res, next) => {
       message: 'User successfully logged out',
     });
   } catch (e) {
-    if (typeof e === 'string') {
-      next(new Error(e.toLocaleLowerCase()));
-    } else if (e instanceof Error) {
-      next(new Error(e.message));
-    }
+    next(new Error('Failed to log the user out. Line 136'));
   }
 };

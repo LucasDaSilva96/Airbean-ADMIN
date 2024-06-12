@@ -8,7 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { Promotional_offers_Model } from '../model/Promotional_offers.js';
-export const promotional_get = (_req, res, _next) => __awaiter(void 0, void 0, void 0, function* () {
+export const promotional_get = (_req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const promotional_offers = yield Promotional_offers_Model.find();
         res.status(200).json({
@@ -18,16 +18,11 @@ export const promotional_get = (_req, res, _next) => __awaiter(void 0, void 0, v
         });
     }
     catch (e) {
-        if (typeof e === 'string') {
-            throw new Error(e.toLocaleLowerCase());
-        }
-        else if (e instanceof Error) {
-            throw new Error(e.message);
-        }
+        next(new Error('Failed to fetch offers. Line 14'));
     }
 });
 // Protected actions
-export const promotional_create_post = (req, res, _next) => __awaiter(void 0, void 0, void 0, function* () {
+export const promotional_create_post = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const offer = yield Promotional_offers_Model.create(Object.assign({}, req.body));
         res.status(201).json({
@@ -37,15 +32,10 @@ export const promotional_create_post = (req, res, _next) => __awaiter(void 0, vo
         });
     }
     catch (e) {
-        if (typeof e === 'string') {
-            throw new Error(e.toLocaleLowerCase());
-        }
-        else if (e instanceof Error) {
-            throw new Error(e.message);
-        }
+        next(new Error('Failed to create offer. Line 34'));
     }
 });
-export const promotional_update_patch = (req, res, _next) => __awaiter(void 0, void 0, void 0, function* () {
+export const promotional_update_patch = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { offerID } = req.params;
         if (!offerID)
@@ -59,36 +49,22 @@ export const promotional_update_patch = (req, res, _next) => __awaiter(void 0, v
         });
     }
     catch (e) {
-        if (typeof e === 'string') {
-            throw new Error(e.toLocaleLowerCase());
-        }
-        else if (e instanceof Error) {
-            throw new Error(e.message);
-        }
+        next(new Error('Failed to update offer. Line 59'));
     }
 });
-export const promotional_delete = (req, res, _next) => __awaiter(void 0, void 0, void 0, function* () {
+export const promotional_delete = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { offerID } = req.params;
         if (!offerID)
             throw new Error('No offer id provided');
-        const offer = yield Promotional_offers_Model.findByIdAndUpdate(offerID, {
-            active: false,
-        });
-        if (!offer)
-            throw new Error('Failed to delete offer');
+        yield Promotional_offers_Model.findByIdAndDelete(offerID);
         res.status(202).json({
             status: 'success',
             message: 'Promotional offer successfully deleted',
         });
     }
     catch (e) {
-        if (typeof e === 'string') {
-            throw new Error(e.toLocaleLowerCase());
-        }
-        else if (e instanceof Error) {
-            throw new Error(e.message);
-        }
+        next(new Error('Failed to delete offer. Line 76'));
     }
 });
 //# sourceMappingURL=Promotional_offersController.js.map

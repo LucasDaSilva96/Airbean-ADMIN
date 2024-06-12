@@ -63,15 +63,7 @@ export const signUp_post = (req, res, next) => __awaiter(void 0, void 0, void 0,
         });
     }
     catch (e) {
-        if (typeof e === 'string') {
-            next(new Error(e.toLocaleLowerCase()));
-        }
-        else if (e instanceof Error) {
-            next(new Error(e.message));
-        }
-        else {
-            next(new Error('Failed to create user'));
-        }
+        next(new Error('Failed to create a new user. Line 67'));
     }
 });
 export const login_post = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -111,12 +103,7 @@ export const login_post = (req, res, next) => __awaiter(void 0, void 0, void 0, 
         });
     }
     catch (e) {
-        if (typeof e === 'string') {
-            next(new Error(e.toLocaleLowerCase()));
-        }
-        else if (e instanceof Error) {
-            next(new Error(e.message));
-        }
+        next(new Error('Failed to log the user in. Line 113'));
     }
 });
 export const logout_get = (_req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -137,12 +124,7 @@ export const logout_get = (_req, res, next) => __awaiter(void 0, void 0, void 0,
         });
     }
     catch (e) {
-        if (typeof e === 'string') {
-            next(new Error(e.toLocaleLowerCase()));
-        }
-        else if (e instanceof Error) {
-            next(new Error(e.message));
-        }
+        next(new Error('Failed to log the user out. Line 136'));
     }
 });
 //# sourceMappingURL=authController.js.map
