@@ -64,9 +64,14 @@ export default function CreateOffer() {
     ) {
       try {
         await createOffer(offerObj);
-        queryClient.invalidateQueries({
+
+        await queryClient.invalidateQueries({
           queryKey: ['offers'],
+          exact: true,
+          refetchType: 'all',
         });
+
+        window.location.reload();
       } catch (e) {
         toast({
           variant: 'destructive',

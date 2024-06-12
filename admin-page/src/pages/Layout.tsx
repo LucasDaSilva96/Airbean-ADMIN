@@ -2,13 +2,14 @@ import DashboardSideNav from '@/components/Dashboard';
 import Header from '@/components/Header';
 import Loader from '@/components/Loader';
 import { getSessionUser } from '@/utils/getSessionUser';
-import { useIsFetching } from '@tanstack/react-query';
+import { useIsFetching, useQueryClient } from '@tanstack/react-query';
 import { Outlet, redirect, useNavigation } from 'react-router-dom';
 
 export default function Layout() {
   const user = getSessionUser();
   const { state } = useNavigation();
   const isFetching = useIsFetching();
+  const queryClient = useQueryClient();
 
   if (!user) {
     redirect('/login');
@@ -29,6 +30,7 @@ export default function Layout() {
           <Outlet />
         </article>
       </div>
+      {queryClient.isFetching() > 0 && <Loader />}
     </main>
   );
 }

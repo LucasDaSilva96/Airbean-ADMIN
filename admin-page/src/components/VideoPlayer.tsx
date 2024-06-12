@@ -6,7 +6,7 @@ export default function VideoPlayer() {
   const [ready, setReady] = useState(false);
 
   return (
-    <div className='absolute z-[-1] max-h-screen overflow-hidden video__wrapper hidden md:block'>
+    <div className='absolute z-[-1] max-h-screen overflow-hidden video__wrapper hidden lg:block'>
       <ReactPlayer
         fallback={<Loader />}
         width={'100%'}

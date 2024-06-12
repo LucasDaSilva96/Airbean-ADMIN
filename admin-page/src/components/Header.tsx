@@ -24,10 +24,10 @@ export default function Header() {
   };
 
   return (
-    <header className='w-screen py-2 px-2 flex items-center justify-between z-50 backdrop-blur-lg md:backdrop-blur-none'>
+    <header className='w-screen py-2 px-2 flex items-center justify-between z-50 '>
       <Link to='/' className='flex items-center gap-1'>
         <img src={coffee} alt='coffee logo' className='w-[24px]' />
-        <span className='italic font-base pl-[1px] text-white md:text-inherit'>
+        <span className='italic font-base pl-[1px] text-white lg:text-inherit'>
           AirBean AB
         </span>
       </Link>

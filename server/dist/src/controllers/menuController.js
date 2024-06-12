@@ -57,10 +57,20 @@ export const menu_create_post = (req, res, _next) => __awaiter(void 0, void 0, v
 });
 export const menu_update_patch = (req, res, _next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { itemID } = req.params;
-        if (!itemID)
-            throw new Error('No item id provided');
-        const item = yield MenuModel.findByIdAndUpdate(itemID, Object.assign(Object.assign({}, req.body), { modified_at: Date.now() }));
+        const image = req.file;
+        let item = null;
+        const submissionObj = {
+            title: req.body.title,
+            desc: req.body.desc,
+            price: req.body.price,
+        };
+        if (image && image.filename) {
+            const IMAGE = yield uploadImageToCloud(image.filename);
+            item = yield MenuModel.findByIdAndUpdate(req.body.id, Object.assign(Object.assign({}, submissionObj), { image: IMAGE }));
+        }
+        else {
+            item = yield MenuModel.findByIdAndUpdate(req.body.id, submissionObj);
+        }
         if (!item)
             throw new Error('Failed to update item');
         res.status(202).json({

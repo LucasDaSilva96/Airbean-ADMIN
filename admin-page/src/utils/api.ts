@@ -184,6 +184,7 @@ type MenuItemSubmission = {
   desc: FormDataEntryValue | null;
   price: FormDataEntryValue | null;
   image?: FormDataEntryValue | null;
+  id?: FormDataEntryValue | null;
 };
 
 export const createMenuItem = async (request: Request) => {
@@ -265,6 +266,54 @@ export const createOffer = async (offer: OfferSubmission) => {
       variant: 'destructive',
       title: 'Login Error',
       description: 'Failed to login. Check your credential and try again',
+    });
+
+    return {
+      status: 'fail',
+    };
+  }
+};
+
+export const pathMenuItem = async (request: Request) => {
+  try {
+    if (!request) throw new Error('No offer provided');
+
+    const data = await request.formData();
+
+    const submission: MenuItemSubmission = {
+      title: data.get('title'),
+      desc: data.get('description'),
+      price: data.get('price'),
+      image: data.get('image'),
+      id: data.get('id'),
+    };
+
+    await axios.patch(BASE_API_URL + `menu/${submission.id}`, submission, {
+      withCredentials: true,
+      headers: {
+        // TODO update url
+        'Access-Control-Allow-Origin': 'http://locahost:8000',
+        'Access-Control-Allow-Headers': 'origin, content-type, accept',
+        'Access-Control-Allow-Credentials': 'true',
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+
+    toast({
+      variant: 'default',
+      title: 'Success',
+      description: 'Item successfully updated',
+    });
+
+    return {
+      status: 'success',
+    };
+  } catch (e) {
+    toast({
+      variant: 'destructive',
+      title: 'Update fail',
+      description:
+        'Failed to update menu item. Please try again or contact support',
     });
 
     return {

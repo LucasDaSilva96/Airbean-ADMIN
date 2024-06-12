@@ -14,7 +14,13 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import Layout from './pages/Layout.tsx';
 import ErrorElement from './components/ErrorElement.tsx';
-import { createMenuItem, fetchMenu, fetchOffers, login } from './utils/api.ts';
+import {
+  createMenuItem,
+  fetchMenu,
+  fetchOffers,
+  login,
+  pathMenuItem,
+} from './utils/api.ts';
 import { ThemeProvider } from './components/ThemeProvider';
 import { Toaster } from '@/components/ui/toaster';
 import { UserProvider } from './components/UserProvider';
@@ -23,8 +29,15 @@ import Menu from './pages/Menu.tsx';
 import Offers from './pages/Offers.tsx';
 import AddMenuItem from './pages/AddMenuItem.tsx';
 import CreateOffer from './pages/CreateOffer.tsx';
+import EditMenu from './pages/EditMenu.tsx';
 
 const queryClient = new QueryClient();
+
+queryClient.setDefaultOptions({
+  queries: {
+    staleTime: Infinity,
+  },
+});
 
 const router = createBrowserRouter([
   {
@@ -33,16 +46,6 @@ const router = createBrowserRouter([
     errorElement: <ErrorElement />,
     loader: async () => {
       const user = getSessionUser();
-      // Menu
-      await queryClient.prefetchQuery({
-        queryKey: ['menu'],
-        queryFn: fetchMenu,
-      });
-      // Offers
-      await queryClient.prefetchQuery({
-        queryKey: ['offers'],
-        queryFn: fetchOffers,
-      });
       if (user) {
         return redirect('/dashboard');
       }
@@ -107,7 +110,7 @@ const router = createBrowserRouter([
         action: async ({ request }) => {
           const req = await createMenuItem(request);
           if (req.status === 'success') {
-            queryClient.invalidateQueries({
+            await queryClient.invalidateQueries({
               queryKey: ['menu'],
             });
           }
@@ -117,6 +120,20 @@ const router = createBrowserRouter([
       {
         path: 'createOffer',
         element: <CreateOffer />,
+      },
+      {
+        path: 'menuEdit/:id',
+        element: <EditMenu />,
+        action: async ({ request }) => {
+          const req = await pathMenuItem(request);
+          if (req.status === 'success') {
+            await queryClient.invalidateQueries({
+              queryKey: ['menu'],
+            });
+            return redirect('/dashboard');
+          }
+          return null;
+        },
       },
     ],
   },

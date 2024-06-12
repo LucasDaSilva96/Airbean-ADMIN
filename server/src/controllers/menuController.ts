@@ -52,13 +52,25 @@ export const menu_create_post: RequestHandler = async (req, res, _next) => {
 
 export const menu_update_patch: RequestHandler = async (req, res, _next) => {
   try {
-    const { itemID } = req.params;
-    if (!itemID) throw new Error('No item id provided');
+    const image = req.file;
 
-    const item = await MenuModel.findByIdAndUpdate(itemID, {
-      ...req.body,
-      modified_at: Date.now(),
-    });
+    let item = null;
+
+    const submissionObj = {
+      title: req.body.title,
+      desc: req.body.desc,
+      price: req.body.price,
+    };
+
+    if (image && image.filename) {
+      const IMAGE = await uploadImageToCloud(image.filename);
+      item = await MenuModel.findByIdAndUpdate(req.body.id, {
+        ...submissionObj,
+        image: IMAGE,
+      });
+    } else {
+      item = await MenuModel.findByIdAndUpdate(req.body.id, submissionObj);
+    }
 
     if (!item) throw new Error('Failed to update item');
 

@@ -9,7 +9,7 @@ function App() {
       <Outlet />
       <VideoPlayer />
       <div
-        className='fixed w-screen h-screen z-[-1] block md:hidden'
+        className='fixed w-screen h-screen z-[-1] block lg:hidden'
         id='welcome-bg'
       ></div>
     </main>

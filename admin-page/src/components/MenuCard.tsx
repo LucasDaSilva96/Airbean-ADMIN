@@ -7,6 +7,7 @@ import {
 } from '@/components/ui/card';
 import { Button } from './ui/button';
 import LazyImage from './LazyImage';
+import { useNavigate } from 'react-router-dom';
 
 export type MenuItem = {
   created_at: string;
@@ -22,14 +23,22 @@ type MenuCardProps = {
 };
 
 export default function MenuCard({ card }: MenuCardProps) {
+  const navigate = useNavigate();
   return (
     <Card className='grid grid-cols-3 items-center'>
       <CardHeader className='flex flex-col items-center gap-1'>
         <CardTitle>{card.title}</CardTitle>
         <span className='italic tracking-wide'>{card.price}$</span>
         <div className='flex items-center gap-2'>
-          <Button variant={'default'}>Edit</Button>
-          <Button variant={'destructive'}>Delete</Button>
+          <Button
+            onClick={() => navigate(`menuEdit/${card._id}`)}
+            variant={'default'}
+          >
+            Edit
+          </Button>
+          <Button onClick={() => navigate('')} variant={'destructive'}>
+            Delete
+          </Button>
         </div>
       </CardHeader>
       <CardContent className='mt-4'>
