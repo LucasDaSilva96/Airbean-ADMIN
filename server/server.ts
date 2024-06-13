@@ -3,7 +3,7 @@ import app from './src/app.js';
 import mongoose from 'mongoose';
 
 const DB: string | undefined = process.env.DB;
-const PORT: string | number = process.env.PORT ? process.env.PORT : 8000;
+const PORT: string | number = process.env.PORT || 8000;
 
 if (DB) {
   mongoose

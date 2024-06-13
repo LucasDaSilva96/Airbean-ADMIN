@@ -2,7 +2,7 @@ import 'dotenv/config';
 import app from './src/app.js';
 import mongoose from 'mongoose';
 const DB = process.env.DB;
-const PORT = process.env.PORT ? process.env.PORT : 8000;
+const PORT = process.env.PORT || 8000;
 if (DB) {
     mongoose
         .connect(DB)
