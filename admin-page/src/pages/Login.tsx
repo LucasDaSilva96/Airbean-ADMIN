@@ -10,23 +10,17 @@ import { Form, Link, useNavigate } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 
 const DEMO_USER = import.meta.env.VITE_DEMO_USER;
 const DEMO_USER_PASSWORD = import.meta.env.VITE_DEMO_USER_PASSWORD;
 
 export default function Login() {
-  const formRef = useRef<HTMLButtonElement>(null);
   const navigate = useNavigate();
   const [demoUser, setDemoUser] = useState(false);
 
   const handleDemoUser = () => {
     setDemoUser(true);
-    if (DEMO_USER && DEMO_USER_PASSWORD) {
-      setTimeout(() => {
-        if (formRef.current) formRef.current.click();
-      }, 100);
-    }
   };
 
   return (
@@ -81,9 +75,7 @@ export default function Login() {
                 Demo user
               </Button>
 
-              <Button type='submit' ref={formRef}>
-                Log in
-              </Button>
+              <Button type='submit'>Log in</Button>
             </div>
           </Form>
         </CardContent>

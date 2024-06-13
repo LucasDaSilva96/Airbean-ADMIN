@@ -221,8 +221,8 @@ export const createMenuItem = async (request: Request) => {
   } catch (e) {
     toast({
       variant: 'destructive',
-      title: 'Login Error',
-      description: 'Failed to login. Check your credential and try again',
+      title: 'Create Error',
+      description: 'Failed to create item. Check your credential and try again',
     });
 
     return {

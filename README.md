@@ -1,5 +1,7 @@
 # Airbean
 
+![Preview of the main page](img/Ariben-Admin-preview.png)
+
 ## Description:
 
 This project provides a robust backend API for managing authentication, menu items, and promotional offers for a restaurant or similar business. It includes secure user authentication, CRUD operations for menu items, and management of promotional offers. The API ensures data security through authentication and authorization mechanisms, allowing only authorized administrators to perform sensitive operations.
