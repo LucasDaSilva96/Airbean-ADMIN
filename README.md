@@ -1,6 +1,6 @@
 # Airbean
 
-![Preview of the main page](img/Ariben-Admin-preview.png)
+![Preview of the main page](/server/img/Ariben-Admin-preview.png)
 
 ## Description:
 
