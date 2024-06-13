@@ -29,11 +29,7 @@ export const protect: RequestHandler = async (req, res, next) => {
       next();
     });
   } catch (e) {
-    if (typeof e === 'string') {
-      next(new Error(e.toLocaleLowerCase()));
-    } else if (e instanceof Error) {
-      next(new Error(e.message));
-    }
+    next(new Error('Failed to authenticate the user. Line 32'));
   }
 };
 

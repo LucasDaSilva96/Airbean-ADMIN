@@ -31,6 +31,7 @@ import AddMenuItem from './pages/AddMenuItem.tsx';
 import CreateOffer from './pages/CreateOffer.tsx';
 import EditMenu from './pages/EditMenu.tsx';
 import EditOffer from './pages/EditOffer.tsx';
+import UserDashboard from './pages/UserDashboard.tsx';
 
 const queryClient = new QueryClient();
 
@@ -153,6 +154,10 @@ const router = createBrowserRouter([
           }
           return null;
         },
+      },
+      {
+        path: 'user',
+        element: <UserDashboard />,
       },
     ],
   },

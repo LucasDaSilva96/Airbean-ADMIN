@@ -1,11 +1,12 @@
 import { getSessionUser } from '@/utils/getSessionUser';
 import { createContext, useContext, useState } from 'react';
 
-type User = {
+export type User = {
   name: string;
   role: string;
   _id: string;
   image: string;
+  email?: string;
 };
 
 type UserProviderProps = {

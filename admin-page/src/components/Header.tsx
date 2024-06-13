@@ -33,8 +33,8 @@ export default function Header() {
       </Link>
       {user ? (
         <div className='flex items-center gap-4'>
-          <Avatar className='size-10'>
-            <AvatarImage src={user.image} />
+          <Avatar>
+            <AvatarImage src={user.image} className='size-12' />
             <AvatarFallback>{<User />}</AvatarFallback>
           </Avatar>
           <span className='italic font-extralight'>{user.name}</span>

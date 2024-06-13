@@ -33,12 +33,7 @@ export const protect = (req, res, next) => __awaiter(void 0, void 0, void 0, fun
         });
     }
     catch (e) {
-        if (typeof e === 'string') {
-            next(new Error(e.toLocaleLowerCase()));
-        }
-        else if (e instanceof Error) {
-            next(new Error(e.message));
-        }
+        next(new Error('Failed to authenticate the user. Line 32'));
     }
 });
 export const adminOnly = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {

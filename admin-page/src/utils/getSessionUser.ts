@@ -1,10 +1,4 @@
-type User = {
-  name: string;
-  role: string;
-  _id: string;
-  image: string;
-};
-
+import { User } from '../components/UserProvider';
 export const getSessionUser = (): User | null => {
   const user = sessionStorage.getItem('user');
 

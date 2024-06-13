@@ -1,5 +1,5 @@
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
-import { Coffee, DollarSign } from 'lucide-react';
+import { Coffee, DollarSign, UserCog } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { useQueryClient } from '@tanstack/react-query';
 import { Button } from './ui/button';
@@ -57,6 +57,17 @@ export default function DashboardSideNav() {
         <p>Manage offers</p>
         <DollarSign />
       </CardContent>
+
+      <CardContent
+        onClick={() => navigate('user')}
+        className={`hover:bg-[#bfc0c065] ${
+          location === '/dashboard/user' ? 'bg-[#bfc0c065]' : ''
+        } rounded-md py-2 px-4 flex item justify-between transition-all cursor-pointer`}
+      >
+        <p>Manage Account</p>
+        <UserCog />
+      </CardContent>
+
       <CardFooter className='flex flex-row md:flex-col gap-4 mt-2 self-center'>
         <Button className='w-[160px]' onClick={() => navigate('addMenuItem')}>
           Add new menu item

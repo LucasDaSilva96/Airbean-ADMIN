@@ -442,3 +442,45 @@ export const deleteOffer = async (id: string) => {
     };
   }
 };
+
+export const updateUser = async (request: React.FormEvent<HTMLFormElement>) => {
+  try {
+    const submission = new FormData(request.currentTarget);
+
+    const req = await axios.patch(
+      BASE_API_URL + `/api/updateUser`,
+      submission,
+      {
+        withCredentials: true,
+        headers: {
+          // TODO update url
+          'Access-Control-Allow-Origin': BASE_API_URL,
+          'Access-Control-Allow-Headers': 'origin, content-type, accept',
+          'Access-Control-Allow-Credentials': 'true',
+          'Content-Type': 'multipart/form-data',
+        },
+      }
+    );
+
+    toast({
+      variant: 'default',
+      title: 'Success',
+      description: 'User successfully updated',
+    });
+
+    return {
+      status: 'success',
+      data: req.data.data,
+    };
+  } catch (e) {
+    toast({
+      variant: 'destructive',
+      title: 'Update Error',
+      description: 'Failed to update. Please try again or contact support.',
+    });
+
+    return {
+      status: 'fail',
+    };
+  }
+};
