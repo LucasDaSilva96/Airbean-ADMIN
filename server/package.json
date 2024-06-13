@@ -8,7 +8,8 @@
   "scripts": {
     "compile": "tsc -w",
     "dev": "nodemon dist/server.js",
-    "build": "node dist/server.js"
+    "build": "node dist/server.js",
+    "start": "node dist/server.js"
   },
   "keywords": [],
   "author": "Lucas Da Silva",
