@@ -484,3 +484,85 @@ export const updateUser = async (request: React.FormEvent<HTMLFormElement>) => {
     };
   }
 };
+
+export const get_reset_token = async (
+  request: React.FormEvent<HTMLFormElement>
+) => {
+  try {
+    const submission = new FormData(request.currentTarget);
+
+    const req = await axios.post(
+      BASE_API_URL + `/api/getToken`,
+      Object.fromEntries(submission),
+      {
+        withCredentials: true,
+        headers: {
+          // TODO update url
+          'Access-Control-Allow-Origin': BASE_API_URL,
+          'Access-Control-Allow-Headers': 'origin, content-type, accept',
+          // 'Access-Control-Allow-Credentials': 'true',
+          // 'Content-Type': 'multipart/form-data',
+        },
+      }
+    );
+
+    return {
+      status: 'success',
+      email: req.data.data,
+    };
+  } catch (e) {
+    toast({
+      variant: 'destructive',
+      title: 'Reset Error',
+      description:
+        'Failed to fetch token. Please try again or contact support.',
+    });
+
+    return {
+      status: 'fail',
+    };
+  }
+};
+
+export const reset_password_post = async (
+  request: React.FormEvent<HTMLFormElement>
+) => {
+  try {
+    const submission = new FormData(request.currentTarget);
+
+    await axios.post(
+      BASE_API_URL + `/api/resetPassword`,
+      Object.fromEntries(submission),
+      {
+        withCredentials: true,
+        headers: {
+          // TODO update url
+          'Access-Control-Allow-Origin': BASE_API_URL,
+          'Access-Control-Allow-Headers': 'origin, content-type, accept',
+          'Access-Control-Allow-Credentials': 'true',
+          // 'Content-Type': 'multipart/form-data',
+        },
+      }
+    );
+    toast({
+      variant: 'default',
+      title: 'Success',
+      description: 'Password successfully updated',
+    });
+
+    return {
+      status: 'success',
+    };
+  } catch (e) {
+    toast({
+      variant: 'destructive',
+      title: 'Reset Error',
+      description:
+        'Failed to reset password. Please try again or contact support.',
+    });
+
+    return {
+      status: 'fail',
+    };
+  }
+};

@@ -27,7 +27,7 @@ export default function Header() {
     <header className='w-screen py-2 px-2 flex items-center justify-between z-50 '>
       <Link to='/' className='flex items-center gap-1'>
         <img src={coffee} alt='coffee logo' className='w-[24px]' />
-        <span className='italic font-base pl-[1px] text-white lg:text-inherit'>
+        <span className='italic font-base pl-[1px] text-white xl:text-inherit'>
           AirBean AB
         </span>
       </Link>

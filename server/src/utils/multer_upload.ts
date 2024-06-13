@@ -2,7 +2,7 @@ import multer from 'multer';
 import { v2 } from 'cloudinary';
 
 const cloudinary = v2;
-
+// Configure Cloudinary with API credentials from environment variables
 cloudinary.config({
   cloud_name: process.env.cloud_name,
   api_key: process.env.api_key,
@@ -12,6 +12,7 @@ cloudinary.config({
 // Define storage configuration for multer
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
+    // Set destination folder for storing uploaded images
     cb(null, './public/img');
   },
   filename: (req, file, cb) => {
@@ -40,20 +41,22 @@ export const upload = multer({
   },
 });
 
+// Function to upload an image file to Cloudinary
 export const uploadImageToCloud = async (filename: string) => {
   try {
+    // Upload the specified file to Cloudinary
     const result = await cloudinary.uploader.upload(
-      './public/img/' + filename,
+      './public/img/' + filename, // Path to the local file
       {
-        folder: 'Airbean',
-        resource_type: 'image',
+        folder: 'Airbean', // Folder in Cloudinary to store the image
+        resource_type: 'image', // Specify resource type as image
       }
     );
 
-    const imageUrl = result.secure_url;
+    const imageUrl = result.secure_url; // Extract the secure URL of the uploaded image
     return imageUrl;
   } catch (e) {
     console.log(e);
-    throw new Error('Failed to upload image');
+    throw new Error('Failed to upload image'); // Throw an error if image upload fails
   }
 };

@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 import mongoose from 'mongoose';
 import validator from 'validator';
 import { genSalt, hash } from 'bcrypt-ts';
+// Define the user schema with various fields and their constraints
 const userSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -51,6 +52,7 @@ const userSchema = new mongoose.Schema({
         default: 'https://res.cloudinary.com/dqx1ejydp/image/upload/f_auto,q_auto/v1/Airbean/r8fynw2bstf3ymrkr1uq',
     },
 });
+// Pre-save middleware to hash the password before saving the user document
 userSchema.pre('save', function (next) {
     return __awaiter(this, void 0, void 0, function* () {
         if (this.password && this.password_confirm) {
@@ -65,5 +67,6 @@ userSchema.pre('save', function (next) {
         next();
     });
 });
+// Create and export the user model
 export const UserModel = mongoose.model('user', userSchema);
 //# sourceMappingURL=User.js.map

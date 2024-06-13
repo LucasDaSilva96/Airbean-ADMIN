@@ -32,6 +32,8 @@ import CreateOffer from './pages/CreateOffer.tsx';
 import EditMenu from './pages/EditMenu.tsx';
 import EditOffer from './pages/EditOffer.tsx';
 import UserDashboard from './pages/UserDashboard.tsx';
+import ResetPasswordEmail from './pages/ResetPasswordEmail.tsx';
+import PasswordReset from './pages/PasswordReset.tsx';
 
 const queryClient = new QueryClient();
 
@@ -73,6 +75,14 @@ const router = createBrowserRouter([
       {
         path: 'signUp',
         element: <SignUp />,
+      },
+      {
+        path: 'resetPassword',
+        element: <ResetPasswordEmail />,
+      },
+      {
+        path: 'updatePassword',
+        element: <PasswordReset />,
       },
     ],
   },

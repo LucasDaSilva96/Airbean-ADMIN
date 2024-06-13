@@ -2,60 +2,60 @@ import jwt from 'jsonwebtoken';
 import type { RequestHandler } from 'express';
 import { UserModel } from '../model/User.js';
 
-const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_SECRET = process.env.JWT_SECRET; // JWT secret key from environment variables
 
-const CLIENT_BASE_URL = process.env.CLIENT_BASE_URL;
+const CLIENT_BASE_URL = process.env.CLIENT_BASE_URL; // Client base URL from environment variables
 
+// Middleware to protect routes and authenticate users using JWT
 export const protect: RequestHandler = async (req, res, next) => {
   try {
-    const TOKEN: string = req.cookies.jwt;
+    const TOKEN: string = req.cookies.jwt; // Get JWT token from cookies
 
     if (!TOKEN) {
       if (CLIENT_BASE_URL) {
-        res.redirect(CLIENT_BASE_URL);
+        res.redirect(CLIENT_BASE_URL); // Redirect to client base URL if token is not provided
       }
-      throw new Error('JWT not provided, Log in first');
+      throw new Error('JWT not provided, Log in first'); // Throw error if token is not provided
     }
 
     if (!JWT_SECRET) {
-      throw new Error('JWT secret is undefined');
+      throw new Error('JWT secret is undefined'); // Throw error if JWT secret is undefined
     }
 
     jwt.verify(TOKEN, JWT_SECRET, function (err, decodedToken) {
-      if (err) throw new Error(err.message);
+      if (err) throw new Error(err.message); // Throw error if token verification fails
       if (typeof decodedToken === 'object') {
-        req.body.id = decodedToken.id;
+        req.body.id = decodedToken.id; // Attach user ID from decoded token to request body
       }
-      next();
+      next(); // Proceed to the next middleware
     });
   } catch (e) {
-    next(new Error('Failed to authenticate the user. Line 32'));
+    console.log(e);
+    next(new Error('Failed to authenticate the user.')); // Pass error to the next middleware
   }
 };
 
+// Middleware to restrict access to admin-only routes
 export const adminOnly: RequestHandler = async (req, res, next) => {
   try {
-    const { id } = req.body;
+    const { id } = req.body; // Get user ID from request body
 
-    if (!id) throw new Error('Id was not provided');
+    if (!id) throw new Error('Id was not provided'); // Throw error if ID is not provided
 
-    const user = await UserModel.findById(id);
+    const user = await UserModel.findById(id); // Find user by ID in the database
 
-    if (!user) throw new Error('No user found with the provide email');
+    if (!user) throw new Error('No user found with the provide email'); // Throw error if no user is found
 
     if (user.role === 'user') {
       return res.status(401).json({
         status: 'fail',
-        message: 'Unauthorized access',
+        message: 'Unauthorized access', // Return unauthorized status if user is not an admin
       });
     }
 
     next();
   } catch (e) {
-    if (typeof e === 'string') {
-      next(new Error(e.toLocaleLowerCase()));
-    } else if (e instanceof Error) {
-      next(new Error(e.message));
-    }
+    console.log(e);
+    next(new Error('User access denied'));
   }
 };

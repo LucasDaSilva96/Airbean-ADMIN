@@ -9,30 +9,30 @@ import {
 import { adminOnly, protect } from '../controllers/protectRouteController.js';
 import { upload } from '../utils/multer_upload.js';
 
-export const menuRouter = express.Router();
+export const menuRouter = express.Router(); // Create a new router for menu items
 
-// GET
+// Public route to get all menu items
 menuRouter.get('/', menu_get);
 
 // Protected routes
 
-// POST
+// Route to create a new menu item, protected and restricted to admin only
 menuRouter.post(
   '/',
   protect,
   adminOnly,
-  upload.single('image'),
+  upload.single('image'), // Middleware to handle image upload
   menu_create_post
 );
 
-// PATCH
+// Route to update an existing menu item, protected and restricted to admin only
 menuRouter.patch(
   '/:itemID',
   protect,
   adminOnly,
-  upload.single('image'),
+  upload.single('image'), // Middleware to handle image upload
   menu_update_patch
 );
 
-// DELETE
+// Route to delete a menu item, protected and restricted to admin only
 menuRouter.delete('/:itemID', protect, adminOnly, menu_delete);

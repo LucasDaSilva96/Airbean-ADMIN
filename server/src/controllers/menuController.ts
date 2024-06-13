@@ -3,35 +3,38 @@ import { MenuModel } from '../model/Menu.js';
 import { uploadImageToCloud } from '../utils/multer_upload.js';
 import { Promotional_offers_Model } from '../model/Promotional_offers.js';
 
+// Handler to get all menu items
 export const menu_get: RequestHandler = async (_req, res, next) => {
   try {
-    const menu = await MenuModel.find();
+    const menu = await MenuModel.find(); // Fetch all menu items
 
     res.status(200).json({
       status: 'success',
       message: 'Menu successfully fetched',
-      data: menu,
+      data: menu, // Send menu items data in response
     });
   } catch (e) {
-    next(new Error('Failed to fetch menu items. Line 16'));
+    console.log(e);
+    next(new Error('Failed to fetch menu items.'));
   }
 };
 
 // Protected actions
 
+// Handler to create a new menu item
 export const menu_create_post: RequestHandler = async (req, res, next) => {
   try {
-    const { title, desc, price } = req.body;
+    const { title, desc, price } = req.body; // Destructure request body to get title, description, and price
     if (!title || !desc || !price)
-      throw new Error('Please provide a title, description and price');
+      throw new Error('Please provide a title, description and price'); // Throw error if any field is missing
 
-    const image = req.file;
+    const image = req.file; // Get image file from request
 
     if (image) {
-      const IMAGE = await uploadImageToCloud(image.filename);
-      await MenuModel.create({ title, desc, price, image: IMAGE });
+      const IMAGE = await uploadImageToCloud(image.filename); // Upload image to cloud
+      await MenuModel.create({ title, desc, price, image: IMAGE }); // Create menu item with image
     } else {
-      await MenuModel.create({ title, desc, price });
+      await MenuModel.create({ title, desc, price }); // Create menu item without image
     }
 
     res.status(201).json({
@@ -39,62 +42,73 @@ export const menu_create_post: RequestHandler = async (req, res, next) => {
       message: 'Menu item successfully created',
     });
   } catch (e) {
-    next(new Error('Failed to create menu item. Line 46'));
+    console.log(e);
+    next(new Error('Failed to create menu item.'));
   }
 };
 
+// Handler to update an existing menu item
 export const menu_update_patch: RequestHandler = async (req, res, next) => {
   try {
-    const image = req.file;
+    const image = req.file; // Get image file from request
 
-    let item = null;
+    let item = null; // Initialize item variable
 
     const submissionObj = {
       title: req.body.title,
       desc: req.body.desc,
       price: req.body.price,
+      modified_at: Date.now(), // Set modified_at to current date
     };
 
     if (image && image.filename) {
-      const IMAGE = await uploadImageToCloud(image.filename);
-      item = await MenuModel.findByIdAndUpdate(req.body.id, {
-        ...submissionObj,
-        image: IMAGE,
-      });
+      const IMAGE = await uploadImageToCloud(image.filename); // Upload new image to cloud
+      item = await MenuModel.findByIdAndUpdate(
+        req.body.id,
+        {
+          ...submissionObj,
+          image: IMAGE, // Update menu item with new image
+        },
+        { new: true }
+      );
     } else {
-      item = await MenuModel.findByIdAndUpdate(req.body.id, submissionObj);
+      item = await MenuModel.findByIdAndUpdate(req.body.id, submissionObj); // Update menu item without new image
     }
 
-    if (!item) throw new Error('Failed to update item');
+    if (!item) throw new Error('Failed to update item'); // Throw error if update fails
 
     res.status(202).json({
       status: 'success',
       message: 'Item successfully updated',
     });
   } catch (e) {
-    next(new Error('Failed to update menu item. Line 83'));
+    console.log(e);
+    next(new Error('Failed to update menu item.'));
   }
 };
 
+// Handler to delete a menu item
 export const menu_delete: RequestHandler = async (req, res, next) => {
   try {
-    const { itemID } = req.params;
-    if (!itemID) throw new Error('No item id provided');
+    const { itemID } = req.params; // Get item ID from request parameters
+    if (!itemID) throw new Error('No item id provided'); // Throw error if item ID is not provided
 
-    await MenuModel.findByIdAndDelete(itemID);
+    await MenuModel.findByIdAndDelete(itemID); // Delete the menu item by ID
 
-    const offers = await Promotional_offers_Model.find();
+    const offers = await Promotional_offers_Model.find(); // Fetch all promotional offers
 
     if (offers.length > 0) {
       for (const offer of offers) {
         if (offer.promotional_items.length > 0) {
+          // Find index of the item in promotional offers
           const index = offer.promotional_items.findIndex(
             (el) => el.id === itemID
           );
 
           if (index >= 0) {
+            // Remove the item from promotional offers
             offer.promotional_items.pull(itemID);
-            await offer.save();
+            await offer.save(); // Save the updated offer
           }
         }
       }
@@ -105,6 +119,7 @@ export const menu_delete: RequestHandler = async (req, res, next) => {
       message: 'Item successfully deleted',
     });
   } catch (e) {
-    next(new Error('Failed to delete menu item. Line 122'));
+    console.log(e);
+    next(new Error('Failed to delete menu item.'));
   }
 };

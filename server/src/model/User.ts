@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import validator from 'validator';
 import { genSalt, hash } from 'bcrypt-ts';
 
+// Define the user schema with various fields and their constraints
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -49,6 +50,7 @@ const userSchema = new mongoose.Schema({
   },
 });
 
+// Pre-save middleware to hash the password before saving the user document
 userSchema.pre('save', async function (next) {
   if (this.password && this.password_confirm) {
     const isSame = this.password === this.password_confirm;
@@ -62,5 +64,5 @@ userSchema.pre('save', async function (next) {
   }
   next();
 });
-
+// Create and export the user model
 export const UserModel = mongoose.model('user', userSchema);
