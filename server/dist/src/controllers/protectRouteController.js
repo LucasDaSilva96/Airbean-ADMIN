@@ -10,15 +10,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 import jwt from 'jsonwebtoken';
 import { UserModel } from '../model/User.js';
 const JWT_SECRET = process.env.JWT_SECRET; // JWT secret key from environment variables
-const CLIENT_BASE_URL = process.env.CLIENT_BASE_URL; // Client base URL from environment variables
 // Middleware to protect routes and authenticate users using JWT
 export const protect = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const TOKEN = req.cookies.jwt; // Get JWT token from cookies
         if (!TOKEN) {
-            if (CLIENT_BASE_URL) {
-                res.redirect(CLIENT_BASE_URL); // Redirect to client base URL if token is not provided
-            }
             throw new Error('JWT not provided, Log in first'); // Throw error if token is not provided
         }
         if (!JWT_SECRET) {
