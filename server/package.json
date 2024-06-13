@@ -9,7 +9,7 @@
     "compile": "tsc -w",
     "dev": "nodemon dist/server.js",
     "build": "node dist/server.js",
-    "start": "node dist/server.js"
+    "start": "node dist/server.js --host 0.0.0.0"
   },
   "keywords": [],
   "author": "Lucas Da Silva",
