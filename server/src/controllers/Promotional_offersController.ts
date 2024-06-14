@@ -1,6 +1,7 @@
 import { RequestHandler } from 'express';
 import { Promotional_offers_Model } from '../model/Promotional_offers.js';
 // Handler to get all promotional offers
+const CLIENT_BASE_URL = process.env.CLIENT_BASE_URL; // Client base URL from environment variables
 export const promotional_get: RequestHandler = async (_req, res, next) => {
   try {
     const promotional_offers = await Promotional_offers_Model.find(); // Fetch all promotional offers
@@ -26,6 +27,7 @@ export const promotional_create_post: RequestHandler = async (
 ) => {
   try {
     const offer = await Promotional_offers_Model.create({ ...req.body }); // Create a new promotional offer with request body data
+    res.header('Access-Control-Allow-Origin', CLIENT_BASE_URL);
 
     res.status(201).json({
       status: 'success',
@@ -55,6 +57,7 @@ export const promotional_update_patch: RequestHandler = async (
     });
 
     if (!offer) throw new Error('Failed to update offer'); // Throw error if update fails
+    res.header('Access-Control-Allow-Origin', CLIENT_BASE_URL);
 
     res.status(202).json({
       status: 'success',
@@ -74,6 +77,7 @@ export const promotional_delete: RequestHandler = async (req, res, next) => {
     if (!offerID) throw new Error('No offer id provided'); // Throw error if offer ID is not provided
 
     await Promotional_offers_Model.findByIdAndDelete(offerID); // Delete the promotional offer by ID
+    res.header('Access-Control-Allow-Origin', CLIENT_BASE_URL);
 
     res.status(202).json({
       status: 'success',

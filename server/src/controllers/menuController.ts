@@ -2,7 +2,7 @@ import { RequestHandler } from 'express';
 import { MenuModel } from '../model/Menu.js';
 import { uploadImageToCloud } from '../utils/multer_upload.js';
 import { Promotional_offers_Model } from '../model/Promotional_offers.js';
-
+const CLIENT_BASE_URL = process.env.CLIENT_BASE_URL; // Client base URL from environment variables
 // Handler to get all menu items
 export const menu_get: RequestHandler = async (_req, res, next) => {
   try {
@@ -36,6 +36,8 @@ export const menu_create_post: RequestHandler = async (req, res, next) => {
     } else {
       await MenuModel.create({ title, desc, price }); // Create menu item without image
     }
+    // Set Access-Control-Allow-Origin header
+    res.header('Access-Control-Allow-Origin', CLIENT_BASE_URL);
 
     res.status(201).json({
       status: 'success',
@@ -76,6 +78,7 @@ export const menu_update_patch: RequestHandler = async (req, res, next) => {
     }
 
     if (!item) throw new Error('Failed to update item'); // Throw error if update fails
+    res.header('Access-Control-Allow-Origin', CLIENT_BASE_URL);
 
     res.status(202).json({
       status: 'success',
@@ -113,6 +116,7 @@ export const menu_delete: RequestHandler = async (req, res, next) => {
         }
       }
     }
+    res.header('Access-Control-Allow-Origin', CLIENT_BASE_URL);
 
     res.status(200).json({
       status: 'success',

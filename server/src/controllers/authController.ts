@@ -137,8 +137,8 @@ export const logout_get: RequestHandler = async (_req, res, next) => {
     res.cookie('jwt', '', {
       maxAge: 1,
       httpOnly: false,
-      secure: false,
-      sameSite: 'lax',
+      secure: true,
+      sameSite: 'none',
     });
 
     res.status(200).json({
@@ -226,9 +226,9 @@ export const reset_token_get: RequestHandler = async (req, res, next) => {
     res.cookie('jwt', TOKEN, {
       maxAge: 1000 * 60 * 60 * 24,
       expires,
-      httpOnly: true,
+      httpOnly: false,
       secure: true,
-      sameSite: 'lax',
+      sameSite: 'none',
     });
 
     res.status(200).json({

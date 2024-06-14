@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import { Promotional_offers_Model } from '../model/Promotional_offers.js';
 // Handler to get all promotional offers
+const CLIENT_BASE_URL = process.env.CLIENT_BASE_URL; // Client base URL from environment variables
 export const promotional_get = (_req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const promotional_offers = yield Promotional_offers_Model.find(); // Fetch all promotional offers
@@ -28,6 +29,7 @@ export const promotional_get = (_req, res, next) => __awaiter(void 0, void 0, vo
 export const promotional_create_post = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const offer = yield Promotional_offers_Model.create(Object.assign({}, req.body)); // Create a new promotional offer with request body data
+        res.header('Access-Control-Allow-Origin', CLIENT_BASE_URL);
         res.status(201).json({
             status: 'success',
             message: 'Promotional offer successfully created',
@@ -48,6 +50,7 @@ export const promotional_update_patch = (req, res, next) => __awaiter(void 0, vo
         const offer = yield Promotional_offers_Model.findByIdAndUpdate(offerID, Object.assign(Object.assign({}, req.body), { modified_at: Date.now() }));
         if (!offer)
             throw new Error('Failed to update offer'); // Throw error if update fails
+        res.header('Access-Control-Allow-Origin', CLIENT_BASE_URL);
         res.status(202).json({
             status: 'success',
             message: 'Promotional offer successfully updated',
@@ -65,6 +68,7 @@ export const promotional_delete = (req, res, next) => __awaiter(void 0, void 0, 
         if (!offerID)
             throw new Error('No offer id provided'); // Throw error if offer ID is not provided
         yield Promotional_offers_Model.findByIdAndDelete(offerID); // Delete the promotional offer by ID
+        res.header('Access-Control-Allow-Origin', CLIENT_BASE_URL);
         res.status(202).json({
             status: 'success',
             message: 'Promotional offer successfully deleted',

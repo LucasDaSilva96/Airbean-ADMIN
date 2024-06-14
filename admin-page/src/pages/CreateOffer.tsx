@@ -70,8 +70,6 @@ export default function CreateOffer() {
           exact: true,
           refetchType: 'all',
         });
-
-        window.location.reload();
       } catch (e) {
         toast({
           variant: 'destructive',

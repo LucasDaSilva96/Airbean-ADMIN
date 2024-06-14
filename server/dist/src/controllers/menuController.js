@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 import { MenuModel } from '../model/Menu.js';
 import { uploadImageToCloud } from '../utils/multer_upload.js';
 import { Promotional_offers_Model } from '../model/Promotional_offers.js';
+const CLIENT_BASE_URL = process.env.CLIENT_BASE_URL; // Client base URL from environment variables
 // Handler to get all menu items
 export const menu_get = (_req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -40,6 +41,8 @@ export const menu_create_post = (req, res, next) => __awaiter(void 0, void 0, vo
         else {
             yield MenuModel.create({ title, desc, price }); // Create menu item without image
         }
+        // Set Access-Control-Allow-Origin header
+        res.header('Access-Control-Allow-Origin', CLIENT_BASE_URL);
         res.status(201).json({
             status: 'success',
             message: 'Menu item successfully created',
@@ -70,6 +73,7 @@ export const menu_update_patch = (req, res, next) => __awaiter(void 0, void 0, v
         }
         if (!item)
             throw new Error('Failed to update item'); // Throw error if update fails
+        res.header('Access-Control-Allow-Origin', CLIENT_BASE_URL);
         res.status(202).json({
             status: 'success',
             message: 'Item successfully updated',
@@ -101,6 +105,7 @@ export const menu_delete = (req, res, next) => __awaiter(void 0, void 0, void 0,
                 }
             }
         }
+        res.header('Access-Control-Allow-Origin', CLIENT_BASE_URL);
         res.status(200).json({
             status: 'success',
             message: 'Item successfully deleted',
