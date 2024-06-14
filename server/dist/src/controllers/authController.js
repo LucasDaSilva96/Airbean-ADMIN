@@ -98,7 +98,7 @@ export const login_post = (req, res, next) => __awaiter(void 0, void 0, void 0, 
             expires,
             httpOnly: false,
             secure: false,
-            sameSite: 'none',
+            sameSite: 'lax',
         });
         const user = {
             name: user_doc.name,

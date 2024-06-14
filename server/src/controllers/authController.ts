@@ -105,7 +105,7 @@ export const login_post: RequestHandler = async (req, res, next) => {
       expires,
       httpOnly: false,
       secure: false,
-      sameSite: 'none',
+      sameSite: 'lax',
     });
 
     const user = {
