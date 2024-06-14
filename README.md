@@ -39,37 +39,37 @@ This project provides a robust backend API for managing authentication, menu ite
 **Logout**
 
 - **Method:** `GET`
-- **Endpoint:** `/api/auth/logout`
+- **Endpoint:** `/api/logout`
 - **Description:** Logs out the authenticated user.
 
 **Get Reset Token**
 
 - **Method:** `POST`
-- **Endpoint:** `/api/auth/getToken`
+- **Endpoint:** `/api/getToken`
 - **Description:** Generates a reset token for password recovery.
 
 **Sign Up**
 
 - **Method:** `POST`
-- **Endpoint:** `/api/auth/signUp`
+- **Endpoint:** `/api/signUp`
 - **Description:** Registers a new user with optional profile image upload.
 
 **Login**
 
 - **Method:** `POST`
-- **Endpoint:** `/api/auth/login`
+- **Endpoint:** `/api/login`
 - **Description:** Logs in an existing user.
 
 **Reset Password**
 
 - **Method:** `POST`
-- **Endpoint:** `/api/auth/resetPassword`
+- **Endpoint:** `/api/resetPassword`
 - **Description:** Updates the password for a user.
 
 **Update User**
 
 - **Method:** `PATCH`
-- **Endpoint:** `/api/auth/updateUser`
+- **Endpoint:** `/api/updateUser`
 - **Description:** Updates user information, requires authentication and supports image upload.
 
 #### Menu Routes
@@ -115,13 +115,13 @@ This project provides a robust backend API for managing authentication, menu ite
 **Update Promotional Offer**
 
 - **Method:** `PATCH`
-- **Endpoint:** `/api/promotional/:offerID`
+- **Endpoint:** `/api/offers/:offerID`
 - **Description:** Updates an existing promotional offer identified by `offerID`, requires admin privileges.
 
 **Delete Promotional Offer**
 
 - **Method:** `DELETE`
-- **Endpoint:** `/api/promotional/:offerID`
+- **Endpoint:** `/api/offers/:offerID`
 - **Description:** Deletes a promotional offer identified by `offerID`, requires admin privileges.
 
 #### Notes:

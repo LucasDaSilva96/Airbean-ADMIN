@@ -99,11 +99,10 @@ export const login_post: RequestHandler = async (req, res, next) => {
     // 1 day in milliseconds = 1000 * 60 * 60 * 24
 
     res.cookie('jwt', TOKEN, {
-      maxAge: 1000 * 60 * 60 * 24,
       expires,
       httpOnly: false,
       secure: true,
-      sameSite: 'lax',
+      sameSite: 'strict',
     });
 
     const user = {

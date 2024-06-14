@@ -91,11 +91,10 @@ export const login_post = (req, res, next) => __awaiter(void 0, void 0, void 0, 
         const expires = new Date(Date.now() + 86400e3);
         // 1 day in milliseconds = 1000 * 60 * 60 * 24
         res.cookie('jwt', TOKEN, {
-            maxAge: 1000 * 60 * 60 * 24,
             expires,
             httpOnly: false,
             secure: true,
-            sameSite: 'lax',
+            sameSite: 'strict',
         });
         const user = {
             name: user_doc.name,
