@@ -103,11 +103,11 @@ export const login_post: RequestHandler = async (req, res, next) => {
     res.cookie('jwt', TOKEN, {
       maxAge: 1000 * 60 * 60 * 24,
       expires,
-      domain: 'https://airben-server.onrender.com',
-      path: '/login',
+      domain: 'http://localhost:5173/',
+      path: '/',
       httpOnly: false,
       secure: false,
-      sameSite: 'lax',
+      sameSite: 'none',
     });
 
     const user = {
