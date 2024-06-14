@@ -48,7 +48,6 @@ export const signUp_post = (req, res, next) => __awaiter(void 0, void 0, void 0,
             image: user_doc.image,
         };
         const TOKEN = yield createJWT(new_user._id); // Create JWT token for the user
-        // TODO: Update the origin  url
         // Set Access-Control-Allow-Origin header
         res.header('Access-Control-Allow-Origin', CLIENT_BASE_URL);
         // const expires = new Date(Date.now() + 86400e3);
@@ -87,17 +86,15 @@ export const login_post = (req, res, next) => __awaiter(void 0, void 0, void 0, 
         const TOKEN = yield createJWT(user_doc.id); // Create JWT token for the user
         if (!TOKEN)
             throw new Error('Failed to generate JWT'); // Throw error if token generation fails
-        // TODO: Update the origin  url
         res.header('Access-Control-Allow-Origin', CLIENT_BASE_URL); // Set Access-Control-Allow-Origin header
         // 1 day from now
         const expires = new Date(Date.now() + 86400e3);
         // 1 day in milliseconds = 1000 * 60 * 60 * 24
-        // TODO Change http=true, secure=true, sameSite="strict"
         res.cookie('jwt', TOKEN, {
             maxAge: 1000 * 60 * 60 * 24,
             expires,
-            httpOnly: false,
-            secure: false,
+            httpOnly: true,
+            secure: true,
             sameSite: 'lax',
         });
         const user = {
@@ -121,11 +118,9 @@ export const login_post = (req, res, next) => __awaiter(void 0, void 0, void 0, 
 // Handler to log out a user
 export const logout_get = (_req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        // TODO: Update the origin  url
         // Set Access-Control-Allow-Origin header
         res.header('Access-Control-Allow-Origin', CLIENT_BASE_URL);
         // 1 day in milliseconds = 1000 * 60 * 60 * 24
-        // TODO Change http=true, secure=true, sameSite="strict"
         res.cookie('jwt', '', {
             maxAge: 1,
             httpOnly: false,
@@ -198,14 +193,15 @@ export const reset_token_get = (req, res, next) => __awaiter(void 0, void 0, voi
         const TOKEN = yield createJWT(user.id); // Create JWT token for the user
         if (!TOKEN)
             throw new Error('Failed to generate JWT'); // Throw error if token generation fails
-        // TODO: Update the origin  url
         res.header('Access-Control-Allow-Origin', CLIENT_BASE_URL); // Set Access-Control-Allow-Origin header
-        // 1 hour in milliseconds = 1000 * 60 * 60 * 1
-        // TODO Change http=true, secure=true, sameSite="strict"
+        // 1 day from now
+        const expires = new Date(Date.now() + 86400e3);
+        // 1 day in milliseconds = 1000 * 60 * 60 * 24
         res.cookie('jwt', TOKEN, {
-            maxAge: 1000 * 60 * 60 * 1,
-            httpOnly: false,
-            secure: false,
+            maxAge: 1000 * 60 * 60 * 24,
+            expires,
+            httpOnly: true,
+            secure: true,
             sameSite: 'lax',
         });
         res.status(200).json({
@@ -234,7 +230,6 @@ export const update_password_post = (req, res, next) => __awaiter(void 0, void 0
         user.password_confirm = password_confirm;
         user.updated_at = new Date(); // Set updated_at to current date
         yield user.save(); // Save the updated user document
-        // TODO: Update the origin  url
         res.header('Access-Control-Allow-Origin', CLIENT_BASE_URL);
         res.status(200).json({
             status: 'success',
