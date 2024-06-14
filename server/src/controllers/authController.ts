@@ -101,9 +101,9 @@ export const login_post: RequestHandler = async (req, res, next) => {
     res.cookie('jwt', TOKEN, {
       maxAge: 1000 * 60 * 60 * 24,
       expires,
-      httpOnly: true,
+      httpOnly: false,
       secure: true,
-      sameSite: 'lax',
+      sameSite: 'none',
     });
 
     const user = {
