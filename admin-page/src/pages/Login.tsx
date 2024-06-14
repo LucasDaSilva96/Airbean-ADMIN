@@ -6,18 +6,22 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Form, Link, useNavigate } from 'react-router-dom';
+import { Form, Link, useNavigate, useNavigation } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
+import Loader from '@/components/Loader';
 
 const DEMO_USER = import.meta.env.VITE_DEMO_USER;
 const DEMO_USER_PASSWORD = import.meta.env.VITE_DEMO_USER_PASSWORD;
 
 export default function Login() {
   const navigate = useNavigate();
+  const { state } = useNavigation();
   const [demoUser, setDemoUser] = useState(false);
+
+  console.log(state);
 
   const handleDemoUser = () => {
     setDemoUser(true);
@@ -88,6 +92,7 @@ export default function Login() {
           </Link>
         </CardFooter>
       </Card>
+      {state !== 'idle' && <Loader />}
     </section>
   );
 }
