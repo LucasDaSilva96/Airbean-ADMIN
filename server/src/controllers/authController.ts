@@ -103,7 +103,7 @@ export const login_post: RequestHandler = async (req, res, next) => {
     res.cookie('jwt', TOKEN, {
       maxAge: 1000 * 60 * 60 * 24,
       expires,
-      domain: 'http://localhost:5173/',
+      domain: 'http://192.168.2.205:5173/',
       path: '/',
       httpOnly: false,
       secure: false,
