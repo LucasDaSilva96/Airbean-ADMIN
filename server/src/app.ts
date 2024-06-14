@@ -8,6 +8,8 @@ import { promotionalRouter } from './routes/Promotional_offers_Routes.js';
 import { fileURLToPath } from 'url';
 import path from 'path';
 
+const ORIGIN_URL = process.env.CLIENT_BASE_URL;
+
 // Convert import.meta.url to a file path
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -35,11 +37,9 @@ app.use(
 app.enable('trust proxy');
 
 //allowing the server to respond to requests from different origins
-// Enable CORS for all routes
-// TODO: Update the origin  url
 app.use(
   cors({
-    origin: 'http://localhost:5173',
+    origin: ORIGIN_URL,
     credentials: true,
     optionsSuccessStatus: 200,
   })
