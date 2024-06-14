@@ -93,9 +93,9 @@ export const login_post = (req, res, next) => __awaiter(void 0, void 0, void 0, 
         res.cookie('jwt', TOKEN, {
             maxAge: 1000 * 60 * 60 * 24,
             expires,
-            httpOnly: true,
+            httpOnly: false,
             secure: true,
-            sameSite: 'lax',
+            sameSite: 'none',
         });
         const user = {
             name: user_doc.name,
