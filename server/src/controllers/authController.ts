@@ -52,14 +52,16 @@ export const signUp_post: RequestHandler = async (req, res, next) => {
     // Set Access-Control-Allow-Origin header
     res.header('Access-Control-Allow-Origin', CLIENT_BASE_URL);
 
+    // const expires = new Date(Date.now() + 86400e3);
     // 1 day in milliseconds = 1000 * 60 * 60 * 24
     // TODO Change http=true, secure=true, sameSite="strict"
-    res.cookie('jwt', TOKEN, {
-      maxAge: 1000 * 60 * 60 * 24,
-      httpOnly: false,
-      secure: false,
-      sameSite: 'lax',
-    });
+    // res.cookie('jwt', TOKEN, {
+    //   maxAge: 1000 * 60 * 60 * 24,
+    //   expires,
+    //   httpOnly: false,
+    //   secure: false,
+    //   sameSite: 'lax',
+    // });
 
     res.status(201).json({
       status: 'success',
@@ -94,10 +96,13 @@ export const login_post: RequestHandler = async (req, res, next) => {
     // TODO: Update the origin  url
     res.header('Access-Control-Allow-Origin', CLIENT_BASE_URL); // Set Access-Control-Allow-Origin header
 
+    // 1 day from now
+    const expires = new Date(Date.now() + 86400e3);
     // 1 day in milliseconds = 1000 * 60 * 60 * 24
     // TODO Change http=true, secure=true, sameSite="strict"
     res.cookie('jwt', TOKEN, {
       maxAge: 1000 * 60 * 60 * 24,
+      expires,
       httpOnly: false,
       secure: false,
       sameSite: 'lax',

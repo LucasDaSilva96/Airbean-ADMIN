@@ -51,14 +51,16 @@ export const signUp_post = (req, res, next) => __awaiter(void 0, void 0, void 0,
         // TODO: Update the origin  url
         // Set Access-Control-Allow-Origin header
         res.header('Access-Control-Allow-Origin', CLIENT_BASE_URL);
+        // const expires = new Date(Date.now() + 86400e3);
         // 1 day in milliseconds = 1000 * 60 * 60 * 24
         // TODO Change http=true, secure=true, sameSite="strict"
-        res.cookie('jwt', TOKEN, {
-            maxAge: 1000 * 60 * 60 * 24,
-            httpOnly: false,
-            secure: false,
-            sameSite: 'lax',
-        });
+        // res.cookie('jwt', TOKEN, {
+        //   maxAge: 1000 * 60 * 60 * 24,
+        //   expires,
+        //   httpOnly: false,
+        //   secure: false,
+        //   sameSite: 'lax',
+        // });
         res.status(201).json({
             status: 'success',
             message: 'Sign up successfully (POST)',
@@ -87,10 +89,13 @@ export const login_post = (req, res, next) => __awaiter(void 0, void 0, void 0, 
             throw new Error('Failed to generate JWT'); // Throw error if token generation fails
         // TODO: Update the origin  url
         res.header('Access-Control-Allow-Origin', CLIENT_BASE_URL); // Set Access-Control-Allow-Origin header
+        // 1 day from now
+        const expires = new Date(Date.now() + 86400e3);
         // 1 day in milliseconds = 1000 * 60 * 60 * 24
         // TODO Change http=true, secure=true, sameSite="strict"
         res.cookie('jwt', TOKEN, {
             maxAge: 1000 * 60 * 60 * 24,
+            expires,
             httpOnly: false,
             secure: false,
             sameSite: 'lax',
