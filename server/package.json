@@ -2,7 +2,7 @@
   "name": "server",
   "version": "1.0.0",
   "description": "API for the Airbean app",
-  "proxy": "http://localhost:8000",
+  "proxy": "https://airben-server.onrender.com",
   "main": "src/server.ts",
   "type": "module",
   "scripts": {
