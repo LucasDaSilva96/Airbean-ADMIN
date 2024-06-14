@@ -2,6 +2,10 @@
 
 ![Preview of the main page](/server/public/img/Ariben-Admin-preview.png)
 
+## Performance Consideration
+
+Note: This project is hosted on a free server, which may impact loading performance, especially during peak usage times. Please be aware that response times and server availability may vary.
+
 ## Description:
 
 This project provides a robust backend API for managing authentication, menu items, and promotional offers for a restaurant or similar business. It includes secure user authentication, CRUD operations for menu items, and management of promotional offers. The API ensures data security through authentication and authorization mechanisms, allowing only authorized administrators to perform sensitive operations.
