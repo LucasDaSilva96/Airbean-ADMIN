@@ -96,6 +96,7 @@ export const login_post = (req, res, next) => __awaiter(void 0, void 0, void 0, 
         res.cookie('jwt', TOKEN, {
             maxAge: 1000 * 60 * 60 * 24,
             expires,
+            domain: 'https://airben-server.onrender.com',
             httpOnly: false,
             secure: false,
             sameSite: 'lax',
