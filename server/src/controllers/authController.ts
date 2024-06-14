@@ -104,7 +104,7 @@ export const login_post: RequestHandler = async (req, res, next) => {
       maxAge: 1000 * 60 * 60 * 24,
       expires,
       domain: 'https://airben-server.onrender.com',
-      path: '/',
+      path: '/login',
       httpOnly: false,
       secure: false,
       sameSite: 'lax',
