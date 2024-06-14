@@ -96,7 +96,7 @@ input[type='number'] {
 }
 
 #welcome-bg {
-  background: url('https://res.cloudinary.com/dqx1ejydp/image/upload/f_auto,q_auto/v1/Airbean/ixaoe2wvjcbsbpbhru2f');
+  background: url('/img/coffeeBg.jpg');
   background-repeat: no-repeat;
   background-size: auto;
 }
