@@ -94,8 +94,9 @@ export const login_post = (req, res, next) => __awaiter(void 0, void 0, void 0, 
             expires,
             httpOnly: false,
             secure: true,
-            sameSite: 'lax',
+            sameSite: 'none',
             partitioned: true,
+            priority: 'high',
         });
         const user = {
             name: user_doc.name,
@@ -125,8 +126,9 @@ export const logout_get = (_req, res, next) => __awaiter(void 0, void 0, void 0,
             maxAge: 1,
             httpOnly: false,
             secure: true,
-            sameSite: 'lax',
+            sameSite: 'none',
             partitioned: true,
+            priority: 'high',
         });
         res.status(200).json({
             status: 'success',
@@ -199,12 +201,12 @@ export const reset_token_get = (req, res, next) => __awaiter(void 0, void 0, voi
         const expires = new Date(Date.now() + 86400e3);
         // 1 day in milliseconds = 1000 * 60 * 60 * 24
         res.cookie('jwt', TOKEN, {
-            maxAge: 1000 * 60 * 60 * 24,
             expires,
             httpOnly: false,
             secure: true,
-            sameSite: 'lax',
+            sameSite: 'none',
             partitioned: true,
+            priority: 'high',
         });
         res.status(200).json({
             status: 'success',
