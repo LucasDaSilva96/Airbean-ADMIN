@@ -78,11 +78,11 @@ export const login = async (request: Request) => {
 
     const res = await axios.post(BASE_API_URL + '/api/login', submission, {
       withCredentials: true,
-      headers: {
-        'Access-Control-Allow-Origin': BASE_API_URL,
-        'Access-Control-Allow-Headers': 'origin, content-type, accept',
-        'Access-Control-Allow-Credentials': 'true',
-      },
+      // headers: {
+      //   'Access-Control-Allow-Origin': BASE_API_URL,
+      //   'Access-Control-Allow-Headers': 'origin, content-type, accept',
+      //   'Access-Control-Allow-Credentials': 'true',
+      // },
     });
 
     setSessionUser(res.data.data);
