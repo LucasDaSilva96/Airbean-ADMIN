@@ -53,6 +53,7 @@ export const signUp = async (user: USER) => {
       await axios.post(BASE_API_URL + '/api/signUp', form);
     }
   } catch (e) {
+    console.error(e);
     // Handle errors and show toast notifications
     toast({
       variant: 'destructive',
@@ -85,6 +86,7 @@ export const login = async (request: Request) => {
       status: 'success',
     };
   } catch (e) {
+    console.error(e);
     // Handle errors and show toast notifications
     toast({
       variant: 'destructive',
@@ -107,6 +109,8 @@ export const logout = async () => {
       },
     });
   } catch (e) {
+    console.error(e);
+
     // Handle errors and show toast notifications
     toast({
       variant: 'destructive',
@@ -128,6 +132,8 @@ export const fetchMenu = async () => {
 
     return req.data.data;
   } catch (e) {
+    console.error(e);
+
     // Handle errors and show toast notifications
     toast({
       variant: 'destructive',
@@ -149,6 +155,8 @@ export const fetchOffers = async () => {
 
     return req.data.data;
   } catch (e) {
+    console.error(e);
+
     // Handle errors and show toast notifications
     toast({
       variant: 'destructive',
@@ -198,6 +206,7 @@ export const createMenuItem = async (request: Request) => {
     };
   } catch (e) {
     // Handle errors and show toast notifications
+    console.error(e);
     toast({
       variant: 'destructive',
       title: 'Create Error',
@@ -231,6 +240,8 @@ export const deleteMenuItem = async (id: string) => {
       status: 'success',
     };
   } catch (e) {
+    console.error(e);
+
     // Handle errors and show toast notifications
     toast({
       variant: 'destructive',
@@ -273,6 +284,8 @@ export const createOffer = async (offer: OfferSubmission) => {
       status: 'success',
     };
   } catch (e) {
+    console.error(e);
+
     // Handle errors and show toast notifications
     toast({
       variant: 'destructive',
@@ -318,6 +331,8 @@ export const patchMenuItem = async (request: Request) => {
       status: 'success',
     };
   } catch (e) {
+    console.error(e);
+
     // Handle errors and show toast notifications
     toast({
       variant: 'destructive',
@@ -360,6 +375,8 @@ export const patchOffer = async (offer: OfferSubmission) => {
       status: 'success',
     };
   } catch (e) {
+    console.error(e);
+
     // Handle errors and show toast notifications
     toast({
       variant: 'destructive',
@@ -395,6 +412,8 @@ export const deleteOffer = async (id: string) => {
       status: 'success',
     };
   } catch (e) {
+    console.error(e);
+
     // Handle errors and show toast notifications
     toast({
       variant: 'destructive',
@@ -435,6 +454,8 @@ export const updateUser = async (request: React.FormEvent<HTMLFormElement>) => {
       data: req.data.data,
     };
   } catch (e) {
+    console.error(e);
+
     // Handle errors and show toast notifications
     toast({
       variant: 'destructive',
@@ -470,6 +491,8 @@ export const get_reset_token = async (
       email: req.data.data,
     };
   } catch (e) {
+    console.error(e);
+
     // Handle errors and show toast notifications
     toast({
       variant: 'destructive',
@@ -508,6 +531,8 @@ export const reset_password_post = async (
       status: 'success',
     };
   } catch (e) {
+    console.error(e);
+
     // Handle errors and show toast notifications
     toast({
       variant: 'destructive',
