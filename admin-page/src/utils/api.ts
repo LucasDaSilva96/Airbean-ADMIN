@@ -5,6 +5,9 @@ import { setSessionUser } from './setSessionUser';
 import { MenuItem } from '@/pages/Menu';
 
 const BASE_API_URL = import.meta.env.VITE_API_URL; // Base API URL from environment variables
+
+axios.defaults.baseURL = BASE_API_URL;
+
 // Function to sign up a new user
 export const signUp = async (user: USER) => {
   try {
@@ -46,15 +49,7 @@ export const signUp = async (user: USER) => {
       form.append('password_confirm', user.password_confirm);
       form.append('role', user.role);
       form.append('image', user.image);
-      await axios.post(BASE_API_URL + '/api/signUp', form, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-
-          'Access-Control-Allow-Origin': BASE_API_URL,
-          'Access-Control-Allow-Headers': 'origin, content-type, accept',
-          'Access-Control-Allow-Credentials': 'true',
-        },
-      });
+      await axios.post(BASE_API_URL + '/api/signUp', form);
     }
   } catch (e) {
     // Handle errors and show toast notifications
@@ -78,11 +73,6 @@ export const login = async (request: Request) => {
 
     const res = await axios.post(BASE_API_URL + '/api/login', submission, {
       withCredentials: true,
-      // headers: {
-      //   'Access-Control-Allow-Origin': BASE_API_URL,
-      //   'Access-Control-Allow-Headers': 'origin, content-type, accept',
-      //   'Access-Control-Allow-Credentials': 'true',
-      // },
     });
 
     setSessionUser(res.data.data);
@@ -108,11 +98,6 @@ export const logout = async () => {
   try {
     await axios.get(BASE_API_URL + '/api/logout', {
       withCredentials: true,
-      headers: {
-        'Access-Control-Allow-Origin': BASE_API_URL,
-        'Access-Control-Allow-Headers': 'origin, content-type, accept',
-        'Access-Control-Allow-Credentials': 'true',
-      },
     });
   } catch (e) {
     // Handle errors and show toast notifications
@@ -128,13 +113,7 @@ export const logout = async () => {
 // Function to fetch menu items
 export const fetchMenu = async () => {
   try {
-    const req = await axios.get(BASE_API_URL + '/api/menu/', {
-      headers: {
-        'Access-Control-Allow-Origin': BASE_API_URL,
-        'Access-Control-Allow-Headers': 'origin, content-type, accept',
-        'Access-Control-Allow-Credentials': 'true',
-      },
-    });
+    const req = await axios.get(BASE_API_URL + '/api/menu/');
 
     return req.data.data;
   } catch (e) {
@@ -151,13 +130,7 @@ export const fetchMenu = async () => {
 // Function to fetch offers
 export const fetchOffers = async () => {
   try {
-    const req = await axios.get(BASE_API_URL + '/api/offers/', {
-      headers: {
-        'Access-Control-Allow-Origin': BASE_API_URL,
-        'Access-Control-Allow-Headers': 'origin, content-type, accept',
-        'Access-Control-Allow-Credentials': 'true',
-      },
-    });
+    const req = await axios.get(BASE_API_URL + '/api/offers/');
 
     return req.data.data;
   } catch (e) {
@@ -194,9 +167,6 @@ export const createMenuItem = async (request: Request) => {
     await axios.post(BASE_API_URL + '/api/menu/', submission, {
       withCredentials: true,
       headers: {
-        'Access-Control-Allow-Origin': BASE_API_URL,
-        'Access-Control-Allow-Headers': 'origin, content-type, accept',
-        'Access-Control-Allow-Credentials': 'true',
         'Content-Type': 'multipart/form-data',
       },
     });
@@ -230,12 +200,6 @@ export const deleteMenuItem = async (id: string) => {
 
     await axios.delete(BASE_API_URL + `/api/menu/${id}`, {
       withCredentials: true,
-      headers: {
-        'Access-Control-Allow-Origin': BASE_API_URL,
-        'Access-Control-Allow-Headers': 'origin, content-type, accept',
-        'Access-Control-Allow-Credentials': 'true',
-        // 'Content-Type': 'multipart/form-data',
-      },
     });
 
     toast({
@@ -275,12 +239,6 @@ export const createOffer = async (offer: OfferSubmission) => {
 
     await axios.post(BASE_API_URL + '/api/offers/', offer, {
       withCredentials: true,
-      headers: {
-        'Access-Control-Allow-Origin': BASE_API_URL,
-        'Access-Control-Allow-Headers': 'origin, content-type, accept',
-        'Access-Control-Allow-Credentials': 'true',
-        // 'Content-Type': 'multipart/form-data',
-      },
     });
 
     toast({
@@ -323,9 +281,6 @@ export const patchMenuItem = async (request: Request) => {
     await axios.patch(BASE_API_URL + `/api/menu/${submission.id}`, submission, {
       withCredentials: true,
       headers: {
-        'Access-Control-Allow-Origin': BASE_API_URL,
-        'Access-Control-Allow-Headers': 'origin, content-type, accept',
-        'Access-Control-Allow-Credentials': 'true',
         'Content-Type': 'multipart/form-data',
       },
     });
@@ -367,12 +322,6 @@ export const patchOffer = async (offer: OfferSubmission) => {
 
     await axios.patch(BASE_API_URL + `/api/offers/${offer._id}`, submission, {
       withCredentials: true,
-      headers: {
-        'Access-Control-Allow-Origin': BASE_API_URL,
-        'Access-Control-Allow-Headers': 'origin, content-type, accept',
-        'Access-Control-Allow-Credentials': 'true',
-        // 'Content-Type': 'multipart/form-data',
-      },
     });
 
     toast({
@@ -405,12 +354,6 @@ export const deleteOffer = async (id: string) => {
 
     await axios.delete(BASE_API_URL + `/api/offers/${id}`, {
       withCredentials: true,
-      headers: {
-        'Access-Control-Allow-Origin': BASE_API_URL,
-        'Access-Control-Allow-Headers': 'origin, content-type, accept',
-        'Access-Control-Allow-Credentials': 'true',
-        // 'Content-Type': 'multipart/form-data',
-      },
     });
 
     toast({
@@ -446,9 +389,6 @@ export const updateUser = async (request: React.FormEvent<HTMLFormElement>) => {
       {
         withCredentials: true,
         headers: {
-          'Access-Control-Allow-Origin': BASE_API_URL,
-          'Access-Control-Allow-Headers': 'origin, content-type, accept',
-          'Access-Control-Allow-Credentials': 'true',
           'Content-Type': 'multipart/form-data',
         },
       }
@@ -489,12 +429,6 @@ export const get_reset_token = async (
       Object.fromEntries(submission),
       {
         withCredentials: true,
-        headers: {
-          'Access-Control-Allow-Origin': BASE_API_URL,
-          'Access-Control-Allow-Headers': 'origin, content-type, accept',
-          // 'Access-Control-Allow-Credentials': 'true',
-          // 'Content-Type': 'multipart/form-data',
-        },
       }
     );
 
@@ -528,12 +462,6 @@ export const reset_password_post = async (
       Object.fromEntries(submission),
       {
         withCredentials: true,
-        headers: {
-          'Access-Control-Allow-Origin': BASE_API_URL,
-          'Access-Control-Allow-Headers': 'origin, content-type, accept',
-          'Access-Control-Allow-Credentials': 'true',
-          // 'Content-Type': 'multipart/form-data',
-        },
       }
     );
     toast({
