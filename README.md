@@ -5,6 +5,7 @@
 ## Performance Consideration
 
 Note: This project is hosted on a free server, which may impact loading performance, especially during peak usage times. Please be aware that response times and server availability may vary.
+Please use google chrome in order to get full access.
 
 ## Description:
 
