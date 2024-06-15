@@ -95,6 +95,7 @@ export const login_post = (req, res, next) => __awaiter(void 0, void 0, void 0, 
             httpOnly: false,
             secure: true,
             sameSite: 'none',
+            partitioned: true,
         });
         const user = {
             name: user_doc.name,
@@ -125,6 +126,7 @@ export const logout_get = (_req, res, next) => __awaiter(void 0, void 0, void 0,
             httpOnly: false,
             secure: true,
             sameSite: 'none',
+            partitioned: true,
         });
         res.status(200).json({
             status: 'success',
@@ -202,6 +204,7 @@ export const reset_token_get = (req, res, next) => __awaiter(void 0, void 0, voi
             httpOnly: false,
             secure: true,
             sameSite: 'none',
+            partitioned: true,
         });
         res.status(200).json({
             status: 'success',

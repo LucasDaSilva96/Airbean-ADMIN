@@ -103,6 +103,7 @@ export const login_post: RequestHandler = async (req, res, next) => {
       httpOnly: false,
       secure: true,
       sameSite: 'none',
+      partitioned: true,
     });
 
     const user = {
@@ -138,6 +139,7 @@ export const logout_get: RequestHandler = async (_req, res, next) => {
       httpOnly: false,
       secure: true,
       sameSite: 'none',
+      partitioned: true,
     });
 
     res.status(200).json({
@@ -228,6 +230,7 @@ export const reset_token_get: RequestHandler = async (req, res, next) => {
       httpOnly: false,
       secure: true,
       sameSite: 'none',
+      partitioned: true,
     });
 
     res.status(200).json({
