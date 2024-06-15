@@ -16,15 +16,15 @@ promotionalRouter.get('/', promotional_get);
 // Protected routes
 
 // Route to create a new promotional offer, protected and restricted to admin only
-promotionalRouter.post('/', protect, adminOnly, promotional_create_post);
+promotionalRouter.post('/', promotional_create_post);
 
 // Route to update an existing promotional offer, protected and restricted to admin only
 promotionalRouter.patch(
   '/:offerID',
-  protect,
-  adminOnly,
+  // protect,
+  // adminOnly,
   promotional_update_patch
 );
 
 // Route to delete a promotional offer, protected and restricted to admin only
-promotionalRouter.delete('/:offerID', protect, adminOnly, promotional_delete);
+promotionalRouter.delete('/:offerID', promotional_delete);

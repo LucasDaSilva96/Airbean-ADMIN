@@ -26,7 +26,7 @@ authRouter.post('/resetPassword', update_password_post);
 // PATCH request to update user information, protected by authentication middleware and allowing image upload
 authRouter.patch(
   '/updateUser',
-  protect, // Middleware to protect route
+  // protect, // Middleware to protect route
   upload.single('image'), // Multer middleware for image upload
   updateUser_patch // Handler function to update user information
 );
