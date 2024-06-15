@@ -1,5 +1,6 @@
 import multer from 'multer';
 import { v2 } from 'cloudinary';
+import sharp from 'sharp';
 
 const cloudinary = v2;
 // Configure Cloudinary with API credentials from environment variables
@@ -44,6 +45,12 @@ export const upload = multer({
 // Function to upload an image file to Cloudinary
 export const uploadImageToCloud = async (filename: string) => {
   try {
+    // Resize image
+    await sharp('./public/img/' + filename)
+      .resize(300, 300, {
+        fit: 'contain',
+      })
+      .toFile('./public/img/' + filename);
     // Upload the specified file to Cloudinary
     const result = await cloudinary.uploader.upload(
       './public/img/' + filename, // Path to the local file

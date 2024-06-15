@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import multer from 'multer';
 import { v2 } from 'cloudinary';
+import sharp from 'sharp';
 const cloudinary = v2;
 // Configure Cloudinary with API credentials from environment variables
 cloudinary.config({
@@ -48,6 +49,12 @@ export const upload = multer({
 // Function to upload an image file to Cloudinary
 export const uploadImageToCloud = (filename) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        // Resize image
+        yield sharp('./public/img/' + filename)
+            .resize(300, 300, {
+            fit: 'contain',
+        })
+            .toFile('./public/img/' + filename);
         // Upload the specified file to Cloudinary
         const result = yield cloudinary.uploader.upload('./public/img/' + filename, // Path to the local file
         {
