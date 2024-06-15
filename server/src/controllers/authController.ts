@@ -93,6 +93,7 @@ export const login_post: RequestHandler = async (req, res, next) => {
 
     res.cookie('jwt', TOKEN, {
       expires,
+      path: '/api/login',
       httpOnly: false,
       secure: true,
       sameSite: 'none',
@@ -126,6 +127,7 @@ export const logout_get: RequestHandler = async (_req, res, next) => {
     // 1 millisecond
     res.cookie('jwt', '', {
       maxAge: 1,
+      path: '/api/logout',
       httpOnly: false,
       secure: true,
       sameSite: 'none',

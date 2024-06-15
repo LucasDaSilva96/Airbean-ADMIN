@@ -84,6 +84,7 @@ export const login_post = (req, res, next) => __awaiter(void 0, void 0, void 0, 
         // 1 day in milliseconds = 1000 * 60 * 60 * 24
         res.cookie('jwt', TOKEN, {
             expires,
+            path: '/api/login',
             httpOnly: false,
             secure: true,
             sameSite: 'none',
@@ -114,6 +115,7 @@ export const logout_get = (_req, res, next) => __awaiter(void 0, void 0, void 0,
         // 1 millisecond
         res.cookie('jwt', '', {
             maxAge: 1,
+            path: '/api/logout',
             httpOnly: false,
             secure: true,
             sameSite: 'none',
