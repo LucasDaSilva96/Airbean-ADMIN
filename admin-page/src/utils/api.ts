@@ -31,6 +31,7 @@ export const signUp = async (user: USER) => {
       // Send POST request to sign up the user
       await axios.post(BASE_API_URL + '/api/signUp', form, {
         headers: {
+          'Access-Control-Allow-Origin': '*',
           'Content-Type': 'multipart/form-data',
         },
       });
@@ -73,6 +74,9 @@ export const login = async (request: Request) => {
 
     const res = await axios.post(BASE_API_URL + '/api/login', submission, {
       withCredentials: true,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
     });
 
     setSessionUser(res.data.data);
@@ -98,6 +102,9 @@ export const logout = async () => {
   try {
     await axios.get(BASE_API_URL + '/api/logout', {
       withCredentials: true,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
     });
   } catch (e) {
     // Handle errors and show toast notifications
@@ -113,7 +120,11 @@ export const logout = async () => {
 // Function to fetch menu items
 export const fetchMenu = async () => {
   try {
-    const req = await axios.get(BASE_API_URL + '/api/menu/');
+    const req = await axios.get(BASE_API_URL + '/api/menu/', {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
+    });
 
     return req.data.data;
   } catch (e) {
@@ -130,7 +141,11 @@ export const fetchMenu = async () => {
 // Function to fetch offers
 export const fetchOffers = async () => {
   try {
-    const req = await axios.get(BASE_API_URL + '/api/offers/');
+    const req = await axios.get(BASE_API_URL + '/api/offers/', {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
+    });
 
     return req.data.data;
   } catch (e) {
@@ -167,6 +182,7 @@ export const createMenuItem = async (request: Request) => {
     await axios.post(BASE_API_URL + '/api/menu/', submission, {
       withCredentials: true,
       headers: {
+        'Access-Control-Allow-Origin': '*',
         'Content-Type': 'multipart/form-data',
       },
     });
@@ -200,6 +216,9 @@ export const deleteMenuItem = async (id: string) => {
 
     await axios.delete(BASE_API_URL + `/api/menu/${id}`, {
       withCredentials: true,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
     });
 
     toast({
@@ -239,6 +258,9 @@ export const createOffer = async (offer: OfferSubmission) => {
 
     await axios.post(BASE_API_URL + '/api/offers/', offer, {
       withCredentials: true,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
     });
 
     toast({
@@ -281,6 +303,7 @@ export const patchMenuItem = async (request: Request) => {
     await axios.patch(BASE_API_URL + `/api/menu/${submission.id}`, submission, {
       withCredentials: true,
       headers: {
+        'Access-Control-Allow-Origin': '*',
         'Content-Type': 'multipart/form-data',
       },
     });
@@ -322,6 +345,9 @@ export const patchOffer = async (offer: OfferSubmission) => {
 
     await axios.patch(BASE_API_URL + `/api/offers/${offer._id}`, submission, {
       withCredentials: true,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
     });
 
     toast({
@@ -354,6 +380,9 @@ export const deleteOffer = async (id: string) => {
 
     await axios.delete(BASE_API_URL + `/api/offers/${id}`, {
       withCredentials: true,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
     });
 
     toast({
@@ -389,6 +418,7 @@ export const updateUser = async (request: React.FormEvent<HTMLFormElement>) => {
       {
         withCredentials: true,
         headers: {
+          'Access-Control-Allow-Origin': '*',
           'Content-Type': 'multipart/form-data',
         },
       }
@@ -429,6 +459,9 @@ export const get_reset_token = async (
       Object.fromEntries(submission),
       {
         withCredentials: true,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+        },
       }
     );
 
@@ -462,6 +495,7 @@ export const reset_password_post = async (
       Object.fromEntries(submission),
       {
         withCredentials: true,
+        headers: { 'Access-Control-Allow-Origin': '*' },
       }
     );
     toast({
