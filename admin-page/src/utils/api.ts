@@ -59,8 +59,8 @@ export const signUp = async (user: USER) => {
       title: 'Sign Up',
       description: 'Failed to create new user',
     });
+    throw new Error('Failed to create new user');
   }
-  throw new Error('Failed to create new user');
 };
 // Function to log in a user
 export const login = async (request: Request) => {
