@@ -61,11 +61,10 @@ export const uploadImageToCloud = (filename) => __awaiter(void 0, void 0, void 0
         yield sharp(filePath)
             .resize(300, 300, { fit: 'contain' })
             .toFile(resizedFilePath);
-        // Upload the specified file to Cloudinary
-        const result = yield cloudinary.uploader.upload('./public/img/' + filename, // Path to the local file
-        {
-            folder: 'Airbean', // Folder in Cloudinary to store the image
-            resource_type: 'image', // Specify resource type as image
+        // Upload resized image to Cloudinary
+        const result = yield cloudinary.uploader.upload(resizedFilePath, {
+            folder: 'Airbean',
+            resource_type: 'image',
         });
         // Clean up local files
         fs.unlinkSync(filePath);
