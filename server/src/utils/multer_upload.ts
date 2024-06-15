@@ -1,6 +1,8 @@
 import multer from 'multer';
 import { v2 } from 'cloudinary';
 import sharp from 'sharp';
+import fs from 'fs';
+import path from 'path';
 
 const cloudinary = v2;
 // Configure Cloudinary with API credentials from environment variables
@@ -44,13 +46,18 @@ export const upload = multer({
 
 // Function to upload an image file to Cloudinary
 export const uploadImageToCloud = async (filename: string) => {
+  const filePath = path.resolve('./public/img', filename);
+  const resizedFilePath = path.resolve('./public/img/resized', filename);
   try {
+    // Check if the file exists before resizing
+    if (!fs.existsSync(filePath)) {
+      throw new Error('File does not exist');
+    }
     // Resize image
-    await sharp('./public/img/' + filename)
-      .resize(300, 300, {
-        fit: 'contain',
-      })
-      .toFile('./public/img/' + filename);
+    await sharp(filePath)
+      .resize(300, 300, { fit: 'contain' })
+      .toFile(resizedFilePath);
+
     // Upload the specified file to Cloudinary
     const result = await cloudinary.uploader.upload(
       './public/img/' + filename, // Path to the local file
@@ -59,6 +66,10 @@ export const uploadImageToCloud = async (filename: string) => {
         resource_type: 'image', // Specify resource type as image
       }
     );
+
+    // Clean up local files
+    fs.unlinkSync(filePath);
+    fs.unlinkSync(resizedFilePath);
 
     const imageUrl = result.secure_url; // Extract the secure URL of the uploaded image
     return imageUrl;
