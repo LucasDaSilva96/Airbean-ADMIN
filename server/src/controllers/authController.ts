@@ -102,7 +102,7 @@ export const login_post: RequestHandler = async (req, res, next) => {
       expires,
       httpOnly: false,
       secure: true,
-      sameSite: 'strict',
+      sameSite: 'none',
     });
 
     const user = {
@@ -137,7 +137,7 @@ export const logout_get: RequestHandler = async (_req, res, next) => {
       maxAge: 1,
       httpOnly: false,
       secure: true,
-      sameSite: 'lax',
+      sameSite: 'none',
     });
 
     res.status(200).json({
@@ -227,7 +227,7 @@ export const reset_token_get: RequestHandler = async (req, res, next) => {
       expires,
       httpOnly: false,
       secure: true,
-      sameSite: 'lax',
+      sameSite: 'none',
     });
 
     res.status(200).json({
