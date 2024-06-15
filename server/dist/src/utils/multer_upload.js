@@ -9,6 +9,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import multer from 'multer';
 import { v2 } from 'cloudinary';
+import fs from 'fs';
+import path from 'path';
 const cloudinary = v2;
 // Configure Cloudinary with API credentials from environment variables
 cloudinary.config({
@@ -19,8 +21,12 @@ cloudinary.config({
 // Define storage configuration for multer
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        // Set destination folder for storing uploaded images
-        cb(null, './public/img');
+        const dir = './public/img';
+        // Ensure the directory exists
+        if (!fs.existsSync(dir)) {
+            fs.mkdirSync(dir, { recursive: true });
+        }
+        cb(null, dir);
     },
     filename: (req, file, cb) => {
         // Generate unique filename for uploaded file
@@ -44,9 +50,14 @@ export const upload = multer({
 });
 // Function to upload an image file to Cloudinary
 export const uploadImageToCloud = (filename) => __awaiter(void 0, void 0, void 0, function* () {
+    const filePath = path.resolve('./public/img', filename);
     try {
-        // Upload resized image to Cloudinary
-        const result = yield cloudinary.uploader.upload('./public/img' + filename, {
+        // Check if the file exists
+        if (!fs.existsSync(filePath)) {
+            throw new Error('File does not exist');
+        }
+        // Upload the file to Cloudinary
+        const result = yield cloudinary.uploader.upload(filePath, {
             folder: 'Airbean',
             resource_type: 'image',
         });
