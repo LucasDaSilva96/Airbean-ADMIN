@@ -6,6 +6,7 @@ const JWT_SECRET = process.env.JWT_SECRET; // JWT secret key from environment va
 
 // Middleware to protect routes and authenticate users using JWT
 export const protect: RequestHandler = async (req, res, next) => {
+  res.header('Access-Control-Allow-Credentials', 'true');
   try {
     const TOKEN: string = req.cookies.jwt; // Get JWT token from cookies
 
@@ -32,6 +33,7 @@ export const protect: RequestHandler = async (req, res, next) => {
 
 // Middleware to restrict access to admin-only routes
 export const adminOnly: RequestHandler = async (req, res, next) => {
+  res.header('Access-Control-Allow-Credentials', 'true');
   try {
     const { id } = req.body; // Get user ID from request body
 

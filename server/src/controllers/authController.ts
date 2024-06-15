@@ -8,7 +8,6 @@ const CLIENT_BASE_URL = process.env.CLIENT_BASE_URL; // Client base URL from env
 
 export const SetHeader: RequestHandler = async (req, res, next) => {
   res.header('Access-Control-Allow-Origin', CLIENT_BASE_URL);
-  res.header('Access-Control-Allow-Credentials', 'true');
   res.header(
     'Access-Control-Allow-Headers',
     'Origin, X-Requested-With, Content-Type, Accept'
@@ -72,6 +71,7 @@ export const signUp_post: RequestHandler = async (req, res, next) => {
 // Handler to log in an existing user
 export const login_post: RequestHandler = async (req, res, next) => {
   try {
+    res.header('Access-Control-Allow-Credentials', 'true');
     const { email, password } = req.body; // Destructure request body
     if (!email || !password)
       throw new Error('Please provide email and password'); // Throw error if email or password is missing
@@ -123,6 +123,7 @@ export const login_post: RequestHandler = async (req, res, next) => {
 
 // Handler to log out a user
 export const logout_get: RequestHandler = async (_req, res, next) => {
+  res.header('Access-Control-Allow-Credentials', 'true');
   try {
     // 1 millisecond
     res.cookie('jwt', '', {

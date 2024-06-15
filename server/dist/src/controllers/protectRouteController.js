@@ -12,6 +12,7 @@ import { UserModel } from '../model/User.js';
 const JWT_SECRET = process.env.JWT_SECRET; // JWT secret key from environment variables
 // Middleware to protect routes and authenticate users using JWT
 export const protect = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    res.header('Access-Control-Allow-Credentials', 'true');
     try {
         const TOKEN = req.cookies.jwt; // Get JWT token from cookies
         if (!TOKEN) {
@@ -36,6 +37,7 @@ export const protect = (req, res, next) => __awaiter(void 0, void 0, void 0, fun
 });
 // Middleware to restrict access to admin-only routes
 export const adminOnly = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    res.header('Access-Control-Allow-Credentials', 'true');
     try {
         const { id } = req.body; // Get user ID from request body
         if (!id)
