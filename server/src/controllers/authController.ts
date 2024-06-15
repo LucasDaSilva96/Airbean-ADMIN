@@ -6,6 +6,17 @@ import { uploadImageToCloud } from '../utils/multer_upload.js';
 
 const CLIENT_BASE_URL = process.env.CLIENT_BASE_URL; // Client base URL from environment variables
 
+export const SetHeader: RequestHandler = async (req, res, next) => {
+  res.header('Access-Control-Allow-Origin', CLIENT_BASE_URL);
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept'
+  );
+
+  next();
+};
+
 // Handler to sign up a new user
 export const signUp_post: RequestHandler = async (req, res, next) => {
   try {
@@ -46,22 +57,6 @@ export const signUp_post: RequestHandler = async (req, res, next) => {
       image: user_doc.image,
     };
 
-    const TOKEN = await createJWT(new_user._id); // Create JWT token for the user
-
-    // Set Access-Control-Allow-Origin header
-    res.header('Access-Control-Allow-Origin', CLIENT_BASE_URL);
-
-    // const expires = new Date(Date.now() + 86400e3);
-    // 1 day in milliseconds = 1000 * 60 * 60 * 24
-    // TODO Change http=true, secure=true, sameSite="strict"
-    // res.cookie('jwt', TOKEN, {
-    //   maxAge: 1000 * 60 * 60 * 24,
-    //   expires,
-    //   httpOnly: false,
-    //   secure: false,
-    //   sameSite: 'lax',
-    // });
-
     res.status(201).json({
       status: 'success',
       message: 'Sign up successfully (POST)',
@@ -91,8 +86,6 @@ export const login_post: RequestHandler = async (req, res, next) => {
 
     const TOKEN = await createJWT(user_doc.id); // Create JWT token for the user
     if (!TOKEN) throw new Error('Failed to generate JWT'); // Throw error if token generation fails
-
-    res.header('Access-Control-Allow-Origin', CLIENT_BASE_URL); // Set Access-Control-Allow-Origin header
 
     // 1 day from now
     const expires = new Date(Date.now() + 86400e3);
@@ -130,11 +123,7 @@ export const login_post: RequestHandler = async (req, res, next) => {
 // Handler to log out a user
 export const logout_get: RequestHandler = async (_req, res, next) => {
   try {
-    // Set Access-Control-Allow-Origin header
-    res.header('Access-Control-Allow-Origin', CLIENT_BASE_URL);
-
-    // 1 day in milliseconds = 1000 * 60 * 60 * 24
-
+    // 1 millisecond
     res.cookie('jwt', '', {
       maxAge: 1,
       httpOnly: false,
@@ -220,8 +209,6 @@ export const reset_token_get: RequestHandler = async (req, res, next) => {
 
     if (!TOKEN) throw new Error('Failed to generate JWT'); // Throw error if token generation fails
 
-    res.header('Access-Control-Allow-Origin', CLIENT_BASE_URL); // Set Access-Control-Allow-Origin header
-
     // 1 day from now
     const expires = new Date(Date.now() + 86400e3);
     // 1 day in milliseconds = 1000 * 60 * 60 * 24
@@ -263,8 +250,6 @@ export const update_password_post: RequestHandler = async (req, res, next) => {
     user.updated_at = new Date(); // Set updated_at to current date
 
     await user.save(); // Save the updated user document
-
-    res.header('Access-Control-Allow-Origin', CLIENT_BASE_URL);
 
     res.status(200).json({
       status: 'success',

@@ -7,6 +7,7 @@ import { menuRouter } from './routes/menuRoutes.js';
 import { promotionalRouter } from './routes/Promotional_offers_Routes.js';
 import { fileURLToPath } from 'url';
 import path from 'path';
+import { SetHeader } from './controllers/authController.js';
 
 const ORIGIN_URL = process.env.CLIENT_BASE_URL;
 
@@ -47,6 +48,8 @@ app.use(
 
 // Parse URL-encoded data into req.body
 app.use(express.urlencoded({ extended: true }));
+
+app.use(SetHeader);
 
 // Routes
 app.use('/api', authRouter);
