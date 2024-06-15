@@ -129,7 +129,6 @@ export const logout = async () => {
 export const fetchMenu = async () => {
   try {
     const req = await axios.get(BASE_API_URL + '/api/menu/', {
-      withCredentials: true,
       headers: {
         'Access-Control-Allow-Origin': BASE_API_URL,
         'Access-Control-Allow-Headers': 'origin, content-type, accept',
@@ -153,7 +152,6 @@ export const fetchMenu = async () => {
 export const fetchOffers = async () => {
   try {
     const req = await axios.get(BASE_API_URL + '/api/offers/', {
-      withCredentials: true,
       headers: {
         'Access-Control-Allow-Origin': BASE_API_URL,
         'Access-Control-Allow-Headers': 'origin, content-type, accept',
