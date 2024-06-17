@@ -1,8 +1,10 @@
 import DashboardSideNav from '@/components/Dashboard';
 import Header from '@/components/Header';
 import Loader from '@/components/Loader';
+import { updateUserTokenWhenReload } from '@/utils/api';
 import { getSessionUser } from '@/utils/getSessionUser';
 import { useIsFetching, useQueryClient } from '@tanstack/react-query';
+import { useEffect } from 'react';
 import { Outlet, redirect, useNavigation } from 'react-router-dom';
 
 export default function Layout() {
@@ -14,6 +16,14 @@ export default function Layout() {
   if (!user) {
     redirect('/login');
   }
+
+  useEffect(() => {
+    (async () => {
+      if (user && user.email) {
+        await updateUserTokenWhenReload(user.email);
+      }
+    })();
+  }, [user]);
 
   if (state === 'loading' || state === 'submitting' || isFetching) {
     return <Loader />;

@@ -546,3 +546,26 @@ export const reset_password_post = async (
     };
   }
 };
+
+export const updateUserTokenWhenReload = async (email: string) => {
+  try {
+    if (!email) throw new Error('No email provided');
+    await axios.post(
+      BASE_API_URL + `/api/getToken`,
+      { email },
+      {
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+        },
+      }
+    );
+  } catch (e) {
+    console.error(e);
+    toast({
+      variant: 'destructive',
+      title: 'Token Error',
+      description:
+        'Failed to reset token. Please try again or contact support.',
+    });
+  }
+};
