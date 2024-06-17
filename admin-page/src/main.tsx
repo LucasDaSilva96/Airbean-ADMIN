@@ -90,7 +90,7 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: 'dashboard',
+    path: '/dashboard',
     loader: async () => {
       const user = getSessionUser(); // Get the current session user
       if (!user) {
