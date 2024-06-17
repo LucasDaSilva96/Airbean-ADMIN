@@ -177,7 +177,7 @@ const router = createBrowserRouter(
     },
   ],
   {
-    basename: 'https://airbean-admin-ui.onrender.com',
+    basename: '/',
   }
 );
 // Render the root of the React application
