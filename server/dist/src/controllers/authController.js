@@ -191,7 +191,6 @@ export const reset_token_get = (req, res, next) => __awaiter(void 0, void 0, voi
             throw new Error('Failed to generate JWT'); // Throw error if token generation fails
         // 1 day from now
         const expires = new Date(Date.now() + 86400e3);
-        // 1 day in milliseconds = 1000 * 60 * 60 * 24
         res.cookie('jwt', TOKEN, {
             expires,
             httpOnly: false,
