@@ -45,136 +45,141 @@ queryClient.setDefaultOptions({
 });
 
 // Define routes for the application
-const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <App />, // Root element of the application
-    errorElement: <ErrorElement />, // Error boundary component
-    loader: async () => {
-      const user = getSessionUser(); // Get the current session user
-      if (user) {
-        return redirect('/dashboard'); // Redirect to dashboard if user is logged in
-      }
-      return null;
-    },
-    children: [
-      {
-        index: true,
-        element: <Welcome />, // Welcome page
+const router = createBrowserRouter(
+  [
+    {
+      path: '/',
+      element: <App />, // Root element of the application
+      errorElement: <ErrorElement />, // Error boundary component
+      loader: async () => {
+        const user = getSessionUser(); // Get the current session user
+        if (user) {
+          return redirect('/dashboard'); // Redirect to dashboard if user is logged in
+        }
+        return null;
       },
-      {
-        path: 'login', // Login page
-        element: <Login />,
-        action: async ({ request }) => {
-          const req = await login(request); // Handle login
+      children: [
+        {
+          index: true,
+          element: <Welcome />, // Welcome page
+        },
+        {
+          path: 'login', // Login page
+          element: <Login />,
+          action: async ({ request }) => {
+            const req = await login(request); // Handle login
 
-          if (req.status === 'success') {
-            return redirect('/dashboard'); // Redirect to dashboard on successful login
-          }
+            if (req.status === 'success') {
+              return redirect('/dashboard'); // Redirect to dashboard on successful login
+            }
 
-          return null;
+            return null;
+          },
         },
-      },
-      {
-        path: 'signUp',
-        element: <SignUp />, // Sign up page
-      },
-      {
-        path: 'resetPassword',
-        element: <ResetPasswordEmail />, // Reset password email page
-      },
-      {
-        path: 'updatePassword',
-        element: <PasswordReset />, // Password reset page
-      },
-    ],
-  },
-  {
-    path: '/dashboard',
-    loader: async () => {
-      const user = getSessionUser(); // Get the current session user
-      if (!user) {
-        return redirect('/login'); // Redirect to login if user is not authenticated
-      }
-      // Prefetch menu data
-      await queryClient.prefetchQuery({
-        queryKey: ['menu'],
-        queryFn: fetchMenu,
-        staleTime: Infinity,
-        gcTime: Infinity,
-      });
-      // Prefetch offers data
-      await queryClient.prefetchQuery({
-        queryKey: ['offers'],
-        queryFn: fetchOffers,
-        staleTime: Infinity,
-        gcTime: Infinity,
-      });
-      return null;
+        {
+          path: 'signUp',
+          element: <SignUp />, // Sign up page
+        },
+        {
+          path: 'resetPassword',
+          element: <ResetPasswordEmail />, // Reset password email page
+        },
+        {
+          path: 'updatePassword',
+          element: <PasswordReset />, // Password reset page
+        },
+      ],
     },
-    errorElement: <ErrorElement />, // Error boundary component
-    element: <Layout />, // Layout component
-    children: [
-      {
-        index: true,
-        element: <Menu />, // Menu page
+    {
+      path: '/dashboard',
+      loader: async () => {
+        const user = getSessionUser(); // Get the current session user
+        if (!user) {
+          return redirect('/login'); // Redirect to login if user is not authenticated
+        }
+        // Prefetch menu data
+        await queryClient.prefetchQuery({
+          queryKey: ['menu'],
+          queryFn: fetchMenu,
+          staleTime: Infinity,
+          gcTime: Infinity,
+        });
+        // Prefetch offers data
+        await queryClient.prefetchQuery({
+          queryKey: ['offers'],
+          queryFn: fetchOffers,
+          staleTime: Infinity,
+          gcTime: Infinity,
+        });
+        return null;
       },
-      {
-        path: 'offers',
-        element: <Offers />, // Offers page
-      },
-      {
-        path: 'addMenuItem',
-        element: <AddMenuItem />, // Add menu item page
-        action: async ({ request }) => {
-          const req = await createMenuItem(request); // Handle add menu item
-          if (req.status === 'success') {
-            await queryClient.invalidateQueries({
-              queryKey: ['menu'],
-            });
-          }
-          return null;
+      errorElement: <ErrorElement />, // Error boundary component
+      element: <Layout />, // Layout component
+      children: [
+        {
+          index: true,
+          element: <Menu />, // Menu page
         },
-      },
-      {
-        path: 'createOffer',
-        element: <CreateOffer />, // Create offer page
-      },
-      {
-        path: 'menuEdit/:id', // Edit menu item page
-        element: <EditMenu />,
-        action: async ({ request }) => {
-          const req = await patchMenuItem(request); // Handle edit menu item
-          if (req.status === 'success') {
-            await queryClient.invalidateQueries({
-              queryKey: ['menu'],
-            });
-            return redirect('/dashboard'); // Redirect to dashboard on successful update
-          }
-          return null;
+        {
+          path: 'offers',
+          element: <Offers />, // Offers page
         },
-      },
-      {
-        path: 'offerEdit/:id', // Edit offer page
-        element: <EditOffer />,
-        action: async ({ request }) => {
-          const req = await patchMenuItem(request); // Handle edit offer
-          if (req.status === 'success') {
-            await queryClient.invalidateQueries({
-              queryKey: ['menu'],
-            });
-            return redirect('/dashboard'); // Redirect to dashboard on successful update
-          }
-          return null;
+        {
+          path: 'addMenuItem',
+          element: <AddMenuItem />, // Add menu item page
+          action: async ({ request }) => {
+            const req = await createMenuItem(request); // Handle add menu item
+            if (req.status === 'success') {
+              await queryClient.invalidateQueries({
+                queryKey: ['menu'],
+              });
+            }
+            return null;
+          },
         },
-      },
-      {
-        path: 'user',
-        element: <UserDashboard />, // User dashboard page
-      },
-    ],
-  },
-]);
+        {
+          path: 'createOffer',
+          element: <CreateOffer />, // Create offer page
+        },
+        {
+          path: 'menuEdit/:id', // Edit menu item page
+          element: <EditMenu />,
+          action: async ({ request }) => {
+            const req = await patchMenuItem(request); // Handle edit menu item
+            if (req.status === 'success') {
+              await queryClient.invalidateQueries({
+                queryKey: ['menu'],
+              });
+              return redirect('/dashboard'); // Redirect to dashboard on successful update
+            }
+            return null;
+          },
+        },
+        {
+          path: 'offerEdit/:id', // Edit offer page
+          element: <EditOffer />,
+          action: async ({ request }) => {
+            const req = await patchMenuItem(request); // Handle edit offer
+            if (req.status === 'success') {
+              await queryClient.invalidateQueries({
+                queryKey: ['menu'],
+              });
+              return redirect('/dashboard'); // Redirect to dashboard on successful update
+            }
+            return null;
+          },
+        },
+        {
+          path: 'user',
+          element: <UserDashboard />, // User dashboard page
+        },
+      ],
+    },
+  ],
+  {
+    basename: 'https://airbean-admin-ui.onrender.com',
+  }
+);
 // Render the root of the React application
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
